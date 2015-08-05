@@ -8,8 +8,8 @@ function GameData() {
 };
 
 GameData.prototype.storeMove = function(lastMove) {
-    //~~~ Stores last move made ~~~//
-    this.moves.undoMoves.unshift(lastMove);
+  //~~~ Stores last move made ~~~//
+  this.moves.undoMoves.unshift(lastMove);
 };
 
 GameData.prototype.storeGame = function(game) {

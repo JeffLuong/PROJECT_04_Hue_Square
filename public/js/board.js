@@ -30,7 +30,7 @@ Board.prototype.dupeBoard = function () {
   }
 
   return duplicateBoard;
-}
+};
 
 //~~~~~~ Returns position as object ~~~~~~//
 Board.prototype.position = function(y, x) { //<<< have to pass to x, y reversed

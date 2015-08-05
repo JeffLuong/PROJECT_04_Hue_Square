@@ -1,5 +1,5 @@
-function Game(GameSize, GameControls, GameRenderer, GameData) {
-  this.size       = GameSize;
+function Game(gameSize, GameControls, GameRenderer, GameData) {
+  this.size       = gameSize;
   this.controls   = new GameControls;
   this.renderer   = new GameRenderer;
   this.data       = new GameData;
@@ -20,10 +20,11 @@ function Game(GameSize, GameControls, GameRenderer, GameData) {
 Game.prototype.initiate = function() {
   this.board     = new Board(this.size);
   this.gameBoard = this.board.board;
-  this.dupeBoard = this.board.dupeBoard();
   this.makeTiles();
   this.initUser();
+  this.dupeBoard = this.board.dupeBoard();
   this.renderer.initBoard(this.size, this.gameBoard, this.userTile);
+  this.getPreviewColors(this.getStartPosition());
 };
 
 //~~~~~~ Randomly generate colors ~~~~~~//
@@ -117,6 +118,9 @@ Game.prototype.moveUser = function(direction) {
     return;
   };
 
+  //~~~~~ Find neighbors of newest position ~~~~~//
+  this.getPreviewColors(nextPosition);
+
   //~~~ Pass last move made so it can be stored ~~~///
   var lastMove = {
     currPosition: nextPosition,
@@ -149,6 +153,40 @@ Game.prototype.findLastPosition = function(position, vector) {
   return { x: (position.x - vector.x), y: (position.y - vector.y) };
 };
 
+Game.prototype.findNeighbors = function(position) {
+  var availableNeighbors = [],
+      availableVectors   = [
+        { x:  0, y: -1 }, // up
+        { x:  1, y:  0 }, // right
+        { x:  0, y:  1 }, // down
+        { x: -1, y:  0 }  // left
+      ];
+
+  for (var i = 0; i < 4; i++) {
+    var neighbor = this.findNextPosition(position, availableVectors[i]);
+
+    //~~ push into availableNeighbors array if in bounds ~~//
+    if (this.board.inBounds(neighbor)) {
+      availableNeighbors.push(neighbor);
+    }
+  };
+  console.log(availableNeighbors);
+  return availableNeighbors;
+};
+
+Game.prototype.getPreviewColors = function(position) {
+  var neighbors      = this.findNeighbors(position);
+      length         = neighbors.length,
+      previewColors = [];
+
+  console.log("getting preview colors...");
+  for (var i = 0; i < length; i++) {
+    var color = this.findAverage(this.gameBoard[position.x][position.y].color, this.returnColor(neighbors[i]));
+    previewColors.push(color);
+  };
+  console.log(previewColors);
+  this.renderer.renderPreview(this.gameBoard, neighbors, previewColors);
+};
 
 //~~~~~ Mix / average the colors  ~~~~~//
 Game.prototype.findAverage = function(color1, color2) {
@@ -229,7 +267,12 @@ Game.prototype.undo = function() {
       lastPos      = this.findLastPosition(lastMove.currPosition, lastMove.lastVector),
       unMixedColor = this.reverseAverage(lastMove.mergedColor, lastMove.lastColor);
 
+  //~~~ Save undone position ~~~//
   tile.saveLastPosition(lastMove.lastPosition);
+  //~~~ Save undone colors onto board ~~~//
+  this.gameBoard[lastMove.lastPosition.x][lastMove.lastPosition.y].color = lastMove.lastColor;
+  this.gameBoard[lastMove.currPosition.x][lastMove.currPosition.y].color = unMixedColor;
+  //~~~ Render changes ~~~//
   this.renderer.undoUser(lastMove.currPosition, unMixedColor);
   this.renderer.updateBoard(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
 };
@@ -248,6 +291,12 @@ Game.prototype.redo = function() {
   var redoLast = this.data.moves.redoMoves.shift(),
       redoPos  = this.findNextPosition(redoLast.lastPosition, redoLast.lastVector);
 
+  //~~~ Save redone position ~~~//
   tile.saveLastPosition(redoLast.currPosition);
+  //~~~ Save redone colors onto board ~~~//
+  this.gameBoard[redoLast.currPosition.x][redoLast.currPosition.y].color = redoLast.mergedColor;
+  this.gameBoard[redoLast.lastPosition.x][redoLast.lastPosition.y].color = redoLast.lastColor;
+  //~~~ Render changes ~~~//
+  this.renderer.undoUser(redoLast.lastPosition, redoLast.lastColor);
   this.renderer.updateBoard(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
 };

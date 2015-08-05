@@ -78,3 +78,29 @@ GameRenderer.prototype.undoUser = function(currPos, color) {
     "background-color": "hsl(" + color + ", 75%, 60%)"
   });
 };
+
+GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
+  //~~~ Select all previous previews: if any exists ~~~//
+  var $lastPreview = $(".preview"),
+      length = neighbors.length;
+
+  //~~~ Remove last previews if exists ~~~//
+  $lastPreview.remove();
+
+  for (var i = 0; i < length; i++) {
+    var $preview = $("<div class='preview'>"),
+        $tile    = $(".tile-position-" + (neighbors[i].x + 1) + "-" + (neighbors[i].y + 1));
+
+    $tile.append($preview);
+
+    if (board[neighbors[i].x][neighbors[i].y].color === colors[i]) {
+      $preview.css({
+        "border": "1px solid darkgray"
+      });
+    } else {
+      $preview.css({
+        "background-color": "hsl(" + colors[i] + ", 75%, 60%)"
+      });
+    };
+  };
+};
