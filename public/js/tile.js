@@ -1,64 +1,28 @@
 function Tile(position, color) {
-  this.x     = position.x;
-  this.y     = position.y;
-  this.color = color;
-  console.log(this.x, this.y, this.color);
+  this.x            = position.x;
+  this.y            = position.y;
+  this.color        = color;
+  this.lastPosition = null;
 };
 
+Tile.prototype.startPosition = function() {
+  return {x: this.x, y: this.y};
+};
 
-// Tile.prototype.makeTiles = function(numOfTiles) {
-//   console.log("making tiles...");
-//
-//   for (var i = 0; i < this.numOfTiles; i++) {
-//     $tile = $("<div class='tile' id='tile" + i + "'>");
-//     $tile.css({
-//       "background-color": this.genColor
-//     });
-//     $("#board-container").append($tile);
-//     this.arrTiles.push(
-//       {
-//         $el: $tile,
-//         name: "tile" + i,
-//       }
-//     );
-//   };
-// };
+Tile.prototype.saveLastPosition = function(position) {
+  this.lastPosition = {x: position.x, y: position.y};
+};
 
+Tile.prototype.updatePosition = function(position) {
+  this.x = position.x;
+  this.y = position.y;
+};
 
-// var tile = {
-//   arrTiles: [],
-//   baseColors: [
-//     "hsl(360, 75%, 60%)",
-//     "hsl(230, 75%, 60%)",
-//     "hsl(60, 75%, 60%)"
-//   ],
-//
-//   genColor: function() {
-//     var len     = tile.baseColors.length,
-//         randNum = [Math.floor(Math.random()*len)],
-//         color   = tile.baseColors[randNum];
-//     return color;
-//   },
-//
-//   makeTiles: function() {
-//     console.log("generating tiles...");
-//     var numOfTiles = game.rows * game.cols;
-//     for (var i = 0; i < numOfTiles; i++) {
-//       $tile = $("<div class='tile' id='tile" + i + "'>");
-//       $tile.css({
-//         "background-color": this.genColor
-//       });
-//       $("#board-container").append($tile);
-//       this.arrTiles.push(
-//         {
-//           $el: $tile,
-//           name: "tile" + i,
-//         }
-//       );
-//     };
-//   },
-//
-//   selectAnimation: function() {
-//
-//   }
-// };
+Tile.prototype.dupeTile = function () {
+  return new Tile({
+    x: this.x,
+    y: this.y
+  }, this.color);
+}
+
+// var x = new Tile(...);   x.dup();

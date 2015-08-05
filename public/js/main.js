@@ -1,4 +1,3 @@
 $(document).ready(function() {
-  // game.gameInit();
-  new Game(4, GameControls, GameRenderer, GameData);
+  window.game = new Game(3, GameControls, GameRenderer, GameData);
 });

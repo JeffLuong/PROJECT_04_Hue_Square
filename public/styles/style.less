@@ -26,14 +26,30 @@ html {
   margin-top: 50px;
   width: 100%;
   height: 500px;
-  background-color: lightgray;
+  border: 1px solid lightgray;
+  padding: 15px;
+}
+
+.board-row {
+  width: 100%;
+
+}
+
+.board-sq {
+  position: relative;
+  height: 100%;
+  float: left;
 }
 
 .tile {
-  width: calc(500px / 4);
-  height: calc(500px / 4);
-  // margin-left: 4px;
-  // margin-top: 4px;
-  // background-color: hsl(0, 75%, 60%);
-  float: left;
+  width: 100%;
+  height: 100%;
+}
+
+.user {
+  position: absolute;
+  z-index: 3;
+  -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
 }
