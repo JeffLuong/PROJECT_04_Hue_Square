@@ -1,5 +1,4 @@
-function Game(gameSize, GameControls, GameRenderer, GameData) {
-  this.size       = gameSize;
+function Game(GameControls, GameRenderer, GameData) {
   this.controls   = new GameControls;
   this.renderer   = new GameRenderer;
   this.data       = new GameData;
@@ -8,7 +7,6 @@ function Game(gameSize, GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.movedFromStart = false
   this.initiate();
   this.controls.onEvent("move", this.moveUser.bind(this));
   this.controls.onEvent("restart", this.restart.bind(this));
@@ -16,15 +14,30 @@ function Game(gameSize, GameControls, GameRenderer, GameData) {
   this.controls.onEvent("redo", this.redo.bind(this));
 };
 
-//~~~~~ Shapes inside of tile?? So that the uer needs to match the shapes too? ~~~~~~//
 Game.prototype.initiate = function() {
-  this.board     = new Board(this.size);
-  this.gameBoard = this.board.board;
-  this.makeTiles();
-  this.initUser();
-  this.dupeBoard = this.board.dupeBoard();
-  this.renderer.initBoard(this.size, this.gameBoard, this.userTile);
-  this.getPreviewColors(this.getStartPosition());
+  var prevState = this.data.getCurrGame();
+
+  if (prevState) {
+    console.log("getting previous state...");
+    this.board          = new Board(prevState.board.size, prevState.board.board);
+    this.score          = prevState.score;
+    this.wins           = prevState.wins;
+    this.level          = prevState.level;
+  } else {
+    this.size           = this.data.levels[4].board.size;
+    this.board          = new Board(this.size);
+    this.gameBoard      = this.board.board;
+    this.movedFromStart = false
+    this.score          = 0;
+    this.wins           = 0;
+    this.level          = 1;
+    this.makeTiles();
+    this.initUser();
+    this.dupeBoard = this.board.dupeBoard();
+    this.renderer.initBoard(this.size, this.gameBoard, this.userTile);
+    this.getPreviewColors(this.getStartPosition());
+    console.log(this.gameBoard);
+  };
 };
 
 //~~~~~~ Randomly generate colors ~~~~~~//
@@ -52,8 +65,13 @@ Game.prototype.initUser = function() {
 
 //~~~~~~ Restart Game ~~~~~~//
 Game.prototype.restart = function() {
-  this.initUser();
-  this.renderer.initBoard(this.size, this.dupeBoard, this.userTile);
+  var allMoves = this.data.moves.undoMoves,
+      length   = allMoves.length;
+
+  //~~~ Executes all undos ~~~//
+  for (var i = 0; i < length; i++) {
+    this.undo();
+  };
 };
 
 //~~~~~ Randomly generate user start position ~~~~~//
@@ -174,6 +192,14 @@ Game.prototype.findNeighbors = function(position) {
   return availableNeighbors;
 };
 
+Game.prototype.testIfWon = function(position, color) {
+  if (position === winPosition) {
+    if (color === winColor) {
+      return
+    }
+  };
+};
+
 Game.prototype.getPreviewColors = function(position) {
   var neighbors      = this.findNeighbors(position);
       length         = neighbors.length,
@@ -240,7 +266,10 @@ Game.prototype.reverseAverage = function(color1, color2) {
 Game.prototype.serializeState = function() {
   var currGame = {
     board: this.board.serializeBoard(),
-    moves: this.data.moves
+    moves: this.data.moves,
+    score: this.score,
+    wins:  this.wins,
+    level: this.level
   };
   return currGame;
 };
@@ -275,6 +304,7 @@ Game.prototype.undo = function() {
   //~~~ Render changes ~~~//
   this.renderer.undoUser(lastMove.currPosition, unMixedColor);
   this.renderer.updateBoard(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
+  this.getPreviewColors(lastMove.lastPosition);
 };
 
 Game.prototype.redo = function() {
@@ -299,4 +329,5 @@ Game.prototype.redo = function() {
   //~~~ Render changes ~~~//
   this.renderer.undoUser(redoLast.lastPosition, redoLast.lastColor);
   this.renderer.updateBoard(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
+  this.getPreviewColors(redoLast.currPosition);
 };

@@ -85,22 +85,60 @@ GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
       length = neighbors.length;
 
   //~~~ Remove last previews if exists ~~~//
-  $lastPreview.remove();
+  $lastPreview.fadeOut(500);
+
 
   for (var i = 0; i < length; i++) {
-    var $preview = $("<div class='preview'>"),
-        $tile    = $(".tile-position-" + (neighbors[i].x + 1) + "-" + (neighbors[i].y + 1));
+    var $preview      = $("<div class='preview'>"),
+        $tile         = $(".tile-position-" + (neighbors[i].x + 1) + "-" + (neighbors[i].y + 1));
+        neighborColor = board[neighbors[i].x][neighbors[i].y].color,
+        range         = this.findColorRange(neighborColor, colors[i]);
 
     $tile.append($preview);
 
-    if (board[neighbors[i].x][neighbors[i].y].color === colors[i]) {
-      $preview.css({
-        "border": "1px solid darkgray"
-      });
-    } else {
+    // if (neighborColor === colors[i]) {
+    //   if (neighborColor === 60) {
+    //     $preview.css({
+    //       "border": "1px solid hsl(295, 75%, 60%)"
+    //     });
+    //   } else if (neighborColor === 360 || neighborColor === 0) {
+    //     $preview.css({
+    //       "border": "1px solid #FAF3DD"
+    //     });
+    //   } else if (neighborColor === 230) {
+    //     $preview.css({
+    //       "border": "1px solid hsl(60, 75%, 60%)"
+    //     });
+    //   }
+    // } else if (range <= 25 || range >= 310) {
+    //   $preview.css({
+    //     "border": "1px solid  #FAF3DD",
+    //     "background-color": "hsl(" + colors[i] + ", 75%, 60%)"
+    //   });
+    // } else {
       $preview.css({
         "background-color": "hsl(" + colors[i] + ", 75%, 60%)"
       });
-    };
+      $preview.fadeIn(500);
+    // };
+  };
+  $lastPreview.remove();
+};
+
+GameRenderer.prototype.findColorRange = function(color1, color2) {
+  var range;
+
+  if (color1 > color2) {
+    range = color1 - color2;
+  } else if (color2 > color1) {
+    range = color2 - color1;
+  };
+
+  if (range >= 0 && range <= 360) {
+    return range;
+  } else if (range < 0) {
+    return range + 360;
+  } else if (range > 360) {
+    return range - 360;
   };
 };

@@ -26,9 +26,9 @@ Board.prototype.dupeBoard = function () {
     for (var col = 0; col < duplicateBoard.size; col++) {
       var duplicateTile = this.board[row][col].dupeTile();
       duplicateBoard.addTile(duplicateTile);
-    }
-  }
-
+    };
+  };
+  
   return duplicateBoard;
 };
 
