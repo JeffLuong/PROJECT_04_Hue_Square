@@ -8,7 +8,7 @@ var express            = require('express'),
 
 // This sets PORT to the process PORT, if it doesn't exist, use local port.
 var PORT = process.env.PORT || 3000;
-var MONGOURI = process.env.MONGOLAB_URI || url;
+// var MONGOURI = process.env.MONGOLAB_URI || url;
 
 // MORGAN ERROR DETECTION
 server.use(morgan('short'));
@@ -32,8 +32,8 @@ server.get('/about', function(req, res) {
   res.render('about');
 });
 
-mongoose.connect(MONGOURI);
-var db = mongoose.connection;
+// mongoose.connect(MONGOURI);
+// var db = mongoose.connection;
 
 db.on('error', function() {
   console.log("Database error");
