@@ -1,0 +1,28 @@
+{
+  "name": "Hue",
+  "version": "1.0.0",
+  "description": "Color based game",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.13.3",
+    "express-session": "^1.11.3",
+    "less": "^2.5.1",
+    "mongoose": "^4.1.1",
+    "morgan": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JeffLuong/PROJECT_03_ColorGame.git"
+  },
+  "author": "Jeffrey Luong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JeffLuong/PROJECT_03_ColorGame/issues"
+  },
+  "homepage": "https://github.com/JeffLuong/PROJECT_03_ColorGame"
+}
