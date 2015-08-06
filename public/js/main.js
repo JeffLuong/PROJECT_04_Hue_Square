@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  window.game = new Game(GameControls, GameRenderer, GameData);
+  window.game = new Game(3, GameControls, GameRenderer, GameData);
   fadeIn();
 });
 

@@ -5,9 +5,11 @@ function GameData() {
     redoMoves: []
   };
   this.gameState;
-  this.levels = this.generateLevels();
+  // this.levels = this.generateLevels();
+  this.dupeBoard;
 };
 
+//~~~ This is a different game mode...needs to be finished! ~~~//
 GameData.prototype.generateLevels = function() {
   console.log("generating levels...");
   var levels = {

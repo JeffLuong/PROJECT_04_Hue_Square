@@ -34,6 +34,7 @@ GameRenderer.prototype.makeRows = function(size, board) {
     $row.css({
       "height": "calc(100% / " + size + ")"
     });
+    //~~ APPEND EACH TILE INDIVIDUALLY WITH DELAY? ~~//
     this.$boardContainer.append($row);
   };
 };
@@ -79,6 +80,18 @@ GameRenderer.prototype.undoUser = function(currPos, color) {
   });
 };
 
+GameRenderer.prototype.renderGoal = function(position, color) {
+  var $goal    = $("<div class='game-goal'>"),
+      $winTile = $(".tile-position-" + (position.x + 1) + "-" + (position.y + 1));
+
+  $goal.css({
+    "background-color": "hsl(" + color + ", 75%, 60%"
+    // "content": "goal"
+  });
+  console.log($winTile);
+  $winTile.append($goal);
+};
+
 GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   //~~~ Select all previous previews: if any exists ~~~//
   var $lastPreview = $(".preview"),
@@ -87,40 +100,20 @@ GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   //~~~ Remove last previews if exists ~~~//
   $lastPreview.fadeOut(500);
 
-
   for (var i = 0; i < length; i++) {
     var $preview      = $("<div class='preview'>"),
         $tile         = $(".tile-position-" + (neighbors[i].x + 1) + "-" + (neighbors[i].y + 1));
         neighborColor = board[neighbors[i].x][neighbors[i].y].color,
         range         = this.findColorRange(neighborColor, colors[i]);
 
-    $tile.append($preview);
+    if ($tile.children().length === 0) {
+      $tile.append($preview);
 
-    // if (neighborColor === colors[i]) {
-    //   if (neighborColor === 60) {
-    //     $preview.css({
-    //       "border": "1px solid hsl(295, 75%, 60%)"
-    //     });
-    //   } else if (neighborColor === 360 || neighborColor === 0) {
-    //     $preview.css({
-    //       "border": "1px solid #FAF3DD"
-    //     });
-    //   } else if (neighborColor === 230) {
-    //     $preview.css({
-    //       "border": "1px solid hsl(60, 75%, 60%)"
-    //     });
-    //   }
-    // } else if (range <= 25 || range >= 310) {
-    //   $preview.css({
-    //     "border": "1px solid  #FAF3DD",
-    //     "background-color": "hsl(" + colors[i] + ", 75%, 60%)"
-    //   });
-    // } else {
       $preview.css({
         "background-color": "hsl(" + colors[i] + ", 75%, 60%)"
       });
       $preview.fadeIn(500);
-    // };
+    }
   };
   $lastPreview.remove();
 };

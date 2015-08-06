@@ -7,7 +7,7 @@
 
 body {
   margin: 0;
-  background-color: #FAF3DD;
+  background-color: #F8F8F8;
 }
 
 html {
@@ -18,18 +18,44 @@ html {
 
 #game-container {
   width: 500px;
-  margin: 0 auto;
-  // padding-right: 4px;
-  // padding-bottom: 4px;
+  margin: 10px auto 0;
+  padding: 15px;
 }
 
 #board-container {
-  margin-top: 50px;
+  margin-top: 30px;
   width: 100%;
   height: 500px;
   // border: 1px solid lightgray;
-  padding: 15px;
   display: none;
+}
+
+.game-title {
+  font-size: 4em;
+}
+
+.game-title span:first-child {
+  color: #E91E63;
+}
+
+.game-title span:nth-child(2) {
+  color: #2196F3;
+}
+
+.game-title span:nth-child(3) {
+  color: #4CAF50;
+}
+
+.game-title :last-child {
+  width: 34px;
+  height: 34px;
+  // border-radius: 25px;
+  background-color: #0298db;
+  display: inline-block;
+  margin-left: .125em;
+  // -webkit-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
+  // -moz-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
+  // box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
 }
 
 .board-row {
@@ -53,12 +79,17 @@ html {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -oz-justify-content: center;
-  transition: all .5s ease-in;
-  // opacity: 0.25;
+  transition: all .45s ease-in;
 }
 
 .user {
+  // border-radius: .25em;
+  // width: 102%;
+  // height: 102%;
+  margin: auto;
   position: absolute;
+  // right: -0.875%;
+  // bottom: -0.875%;
   z-index: 3;
   -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
   -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
@@ -70,13 +101,31 @@ html {
   height: 25%;
   border-radius: 100%;
   display: none;
-  // position: relative;
   margin: auto;
   -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
   -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
   box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
 }
 
-.fadeIn {
-  opacity: 1;
+.goal-container {
+  margin-top: 10px;
+}
+
+.game-goal {
+  color: white;
+  font-size: 1.5em;
+  // position: absolute;
+  margin: auto;
+  // margin-left: calc(100% - 100px);
+  // -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  // -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  // box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  width: 35%;
+  height: 35%;
+  text-align: center;
+}
+
+.game-goal::after {
+  line-height: 3.5em;
+  content: "goal";
 }

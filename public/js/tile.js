@@ -1,16 +1,22 @@
 function Tile(position, color) {
-  this.x            = position.x;
-  this.y            = position.y;
-  this.color        = color;
-  this.lastPosition = null;
+  this.x              = position.x;
+  this.y              = position.y;
+  this.color          = color;
+  this.lastPosition   = null;
+  this.aiLastPosition = {x: 0, y: 0};
 };
 
 Tile.prototype.startPosition = function() {
   return {x: this.x, y: this.y};
 };
 
-Tile.prototype.saveLastPosition = function(position) {
-  this.lastPosition = {x: position.x, y: position.y};
+Tile.prototype.saveLastPosition = function(position, aiPlayer) {
+  if (aiPlayer === true) {
+    console.log("saving ai last position...");
+    this.aiLastPosition = {x: position.x, y: position.y};
+  } else {
+    this.lastPosition = {x: position.x, y: position.y};
+  }
 };
 
 Tile.prototype.updatePosition = function(position) {
