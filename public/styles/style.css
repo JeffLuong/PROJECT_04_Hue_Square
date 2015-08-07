@@ -258,3 +258,7 @@ a.button:hover {
   text-align: center;
   margin-bottom: 15px;
 }
+
+.ui-icon-loading + h1 {
+  display: none;
+}
