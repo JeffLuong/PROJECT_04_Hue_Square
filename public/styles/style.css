@@ -1,3 +1,5 @@
+@import url(https:fonts.googleapis.com/css?family=Oxygen:700,400,300|Raleway:500,100,400,200,300);
+
 * {
   font: inherit;
   box-sizing: border-box;
@@ -12,26 +14,37 @@ body {
 
 html {
   font-size: 1em;
+  /*font-family: 'Oxygen', sans-serif;
+  font-weight: 300;*/
   font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 200;
 }
 
-#game-container {
+p {
+  margin: 0;
+}
+
+#main-container {
+  margin: 30px auto 0;
   width: 500px;
+}
+
+#game-container {
+  width: 100%;
   margin: 10px auto 0;
   padding: 15px;
+  position: relative;
 }
 
 #board-container {
-  margin-top: 30px;
   width: 100%;
   height: 500px;
-  // border: 1px solid lightgray;
   display: none;
 }
 
 .game-title {
-  font-size: 4em;
+  font-size: 4.5em;
+  padding-left: 15px;
 }
 
 .game-title span:first-child {
@@ -43,19 +56,20 @@ html {
 }
 
 .game-title span:nth-child(3) {
-  color: #4CAF50;
+  /*color: #4CAF50;*/
+  color: hsl(60, 55%, 70%);
 }
 
 .game-title :last-child {
-  width: 34px;
-  height: 34px;
-  // border-radius: 25px;
+  width: 40px;
+  height: 40px;
+  /* border-radius: 25px;*/
   background-color: #0298db;
   display: inline-block;
   margin-left: .125em;
-  // -webkit-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
-  // -moz-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
-  // box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
+  /* -webkit-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
+   -moz-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
+   box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);*/
 }
 
 .board-row {
@@ -83,13 +97,13 @@ html {
 }
 
 .user {
-  // border-radius: .25em;
-  // width: 102%;
-  // height: 102%;
+  /* border-radius: .25em;*/
+  /* width: 102%;*/
+  /* height: 102%;*/
   margin: auto;
   position: absolute;
-  // right: -0.875%;
-  // bottom: -0.875%;
+  /* right: -0.875%;*/
+  /* bottom: -0.875%;*/
   z-index: 3;
   -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
   -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
@@ -113,19 +127,134 @@ html {
 
 .game-goal {
   color: white;
-  font-size: 1.5em;
-  // position: absolute;
+  font-size: 3em;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -oz-justify-content: center;
   margin: auto;
-  // margin-left: calc(100% - 100px);
-  // -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
-  // -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
-  // box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  /* margin-left: calc(100% - 100px);*/
+  /* -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
+  /* -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
+  /* box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
   width: 35%;
   height: 35%;
   text-align: center;
 }
 
 .game-goal::after {
-  line-height: 3.5em;
-  content: "goal";
+  margin: auto;
+  /*line-height: 3.5em;*/
+  content: "+";
+}
+
+.game-message {
+  display: none;
+  position: absolute;
+  background: rgba(219, 218, 238, 0.60);
+  z-index: 100;
+  margin: 15px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  -webkit-animation: fadeIn 800ms ease 1200ms;
+  -moz-animation: fadeIn 800ms ease 1200ms;
+  animation: fadeIn 800ms ease 1200ms;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.game-message p {
+  font-size: 3em;
+  height: calc(100% / 2);
+  padding-top: 100px;
+  /*margin: 2.5em 0;*/
+  color: white;
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.options {
+  width: 100%;
+  padding-top: 25px;
+  height: calc(100% / 2);
+}
+
+.left-option, .right-option {
+  width: 50%;
+  height: 100%;
+  float: left;
+}
+
+a.button {
+  /*background-color: darkgray;*/
+  /*-webkit-box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);
+  -moz-box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);
+  box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);*/
+  /*width: 150px;
+  height: 50px;*/
+  margin: 20px auto 0;
+  font-size: 1.25em;
+  transition: all .5s ease;
+  padding: 5px;
+}
+
+.next, .retry {
+  color: white;
+  /*display: none;*/
+}
+
+a.button:hover {
+  background-color: white;
+  /*border-bottom: 1px solid lightgray;*/
+  cursor: pointer;
+  color: darkgray;
+}
+
+.game-over {
+  display: block;
+}
+
+.game-instructions {
+  margin-top: 20px;
+}
+
+.game-instructions p {
+  padding: 0 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }

@@ -1,7 +1,8 @@
 function GameRenderer() {
   console.log("rendering game...");
-  this.$gameContainer  = $("#game-container");
-  this.$boardContainer = $("#board-container");
+  this.$gameContainer    = $("#game-container");
+  this.$boardContainer   = $("#board-container");
+  this.$messageContainer = $(".game-message");
 };
 
 //~~~~~~ Render start gameboard ~~~~~~//
@@ -9,6 +10,13 @@ GameRenderer.prototype.initBoard = function(size, board, userTile) {
   this.makeRows(size, board);
   this.updateBoard(board, userTile, null, null);
 };
+
+GameRenderer.prototype.removeGameBoard = function(board) {
+  var $rows = $(".board-row");
+
+  $rows.remove();
+  this.clearMessage();
+}
 
 //~~~~~~ Update gameboard ~~~~~~//
 GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor) {
@@ -86,9 +94,7 @@ GameRenderer.prototype.renderGoal = function(position, color) {
 
   $goal.css({
     "background-color": "hsl(" + color + ", 75%, 60%"
-    // "content": "goal"
   });
-  console.log($winTile);
   $winTile.append($goal);
 };
 
@@ -134,4 +140,31 @@ GameRenderer.prototype.findColorRange = function(color1, color2) {
   } else if (range > 360) {
     return range - 360;
   };
+};
+
+GameRenderer.prototype.renderMessage = function(won) {
+  console.log("rendering message...");
+  var message = won ? "You Win!" : "You Lost!",
+      options = won ? "next"     : "retry",
+      $retry  = $(".retry"),
+      $next   = $(".next");
+
+  if (won) {
+    $(".game-goal").fadeOut(300);
+    $retry.text("play again");
+    $next.text("next puzzle");
+  } else {
+    $next.text("skip puzzle");
+    $retry.text("try again");
+  }
+
+  this.$messageContainer.addClass("game-over");
+  // $(".next").addClass("game-over");
+  // $(".retry").addClass("game-over");
+  $(".game-message > p").text(message);
+
+};
+
+GameRenderer.prototype.clearMessage = function() {
+  this.$messageContainer.removeClass("game-over");
 };

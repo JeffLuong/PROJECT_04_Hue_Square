@@ -43,6 +43,18 @@ GameControls.prototype.listeners = function() {
       };
     };
   });
+
+  $(".retry").on("click", function() {
+    // event.preventDefault();
+    console.log("restart click working...");
+    that.restart.call(that, event);
+  });
+
+  $(".next").on("click", function() {
+    // event.preventDefault();
+    console.log("next click working...");
+    that.nextMap.call(that, event);
+  });
 };
 
 GameControls.prototype.undo = function(event) {
@@ -59,6 +71,11 @@ GameControls.prototype.restart = function(event) {
   event.preventDefault();
   this.emitter("restart");
 };
+
+GameControls.prototype.nextMap = function(event) {
+  event.preventDefault();
+  this.emitter("nextMap");
+}
 
 GameControls.prototype.emitter = function(event, data) {
   var callbacks = this.events[event];

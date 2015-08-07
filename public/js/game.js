@@ -1,4 +1,4 @@
-function Game(setting, GameControls, GameRenderer, GameData) {
+function Game(GameControls, GameRenderer, GameData) {
   this.controls   = new GameControls;
   this.renderer   = new GameRenderer;
   this.data       = new GameData;
@@ -7,52 +7,59 @@ function Game(setting, GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting = setting // refers to difficulty number inserted by user
+  this.setting  = 1; // refers to difficulty number inserted by user
+  this.score    = 0;
+  this.wins     = 0;
+  this.rounds   = 3;
+  this.levels   = this.initLevels();
   this.initiate(this.setting);
   this.controls.onEvent("move", this.moveUser.bind(this));
   this.controls.onEvent("restart", this.restart.bind(this));
+  this.controls.onEvent("nextMap", this.nextMap.bind(this));
   this.controls.onEvent("undo", this.undo.bind(this));
   this.controls.onEvent("redo", this.redo.bind(this));
 };
 
 Game.prototype.initiate = function(setting) {
-  var prevState = this.data.getCurrGame();
-    this.levels = this.initLevels();
+  // var prevState   = this.data.getCurrGame();
 
-  if (prevState) {
+    this.gameOver = false;
+    this.won      = false;
+
+  // if (prevState) {
     // console.log("getting previous state...");
-    this.board            = new Board(prevState.board.size, prevState.board.board);
-    this.score            = prevState.score;
-    this.wins             = prevState.wins;
-    this.level            = prevState.level;
-  } else {
-    this.currLevel        = this.levels[this.setting]; // setting refers to what user passes in as difficulty
+    // this.board            = new Board(prevState.board.size, prevState.board.board);
+    // this.score            = prevState.score;
+    // this.wins             = prevState.wins;
+    // this.setting          = prevState.setting;
+    // this.userMoves        = prevState.userMoves;
+  // } else {
+    this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
     this.size             = this.currLevel.size;
     this.board            = new Board(this.size);
     this.gameBoard        = this.board.board;
     this.movedFromStart   = false;
     this.aiMovedFromStart = false;
-    this.score            = 0;
-    this.wins             = 0;
+    this.userMoves        = 0;
     this.makeTiles();
     this.initUser();
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile);
     this.getPreviewColors(this.getStartPosition());
     this.genSolution(this.currLevel);
-  };
+  // };
 };
 
 Game.prototype.initLevels = function() {
   var that = this;
   var levels  = {
         1: { scale: 0.75, size: 2 },
-        2: { scale: 0.65, size: 2 },
-        3: { scale: 0.85, size: 3 },
-        4: { scale: 0.75, size: 3 },
-        5: { scale: 0.95, size: 4 },
-        6: { scale: 0.90, size: 4 },
-        7: { scale: 0.95, size: 5 },
-        8: { scale: 0.95, size: 5 },
+        2: { scale: 0.85, size: 3 },
+        3: { scale: 0.80, size: 3 },
+        4: { scale: 0.95, size: 4 },
+        5: { scale: 0.90, size: 4 },
+        6: { scale: 0.95, size: 5 },
+        7: { scale: 0.90, size: 5 },
+        8: { scale: 0.95, size: 6 },
         winPoint: function(level) {
           console.log("returning win point...");
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
@@ -84,8 +91,10 @@ Game.prototype.initUser = function() {
   this.insertUser(this.gameBoard, startPos);
 };
 
-//~~~~~~ Restart Game ~~~~~~//
+//~~~~~~  Game re-start ~~~~~~//
 Game.prototype.restart = function() {
+  this.gameOver = false;
+  this.renderer.clearMessage();
   var allMoves = this.data.moves.undoMoves,
       length   = allMoves.length;
 
@@ -93,6 +102,24 @@ Game.prototype.restart = function() {
   for (var i = 0; i < length; i++) {
     this.undo();
   };
+
+  if (this.won) {
+    this.renderer.renderGoal(this.winPoint, this.winColor);
+  };
+
+  this.won = false;
+  this.data.moves.undoMoves = [];
+  this.data.moves.redoMoves = [];
+};
+
+//~~~~~~  Game re-start ~~~~~~//
+Game.prototype.nextMap = function() {
+  this.gameOver = false;
+  this.data.moves.undoMoves = [];
+  this.data.moves.redoMoves = [];
+  this.renderer.removeGameBoard();
+  this.initiate(this.setting);
+  this.won = false;
 };
 
 //~~~~~ Randomly generate user start position ~~~~~//
@@ -122,6 +149,10 @@ Game.prototype.insertUser = function(board, position) {
 Game.prototype.moveUser = function(direction, aiPlayer) {
   var position = null,
       vector   = this.getDirection(direction);
+  //~~~~~ If game over, do nothing ~~~~~//
+  if(this.gameOver) {
+    return;
+  };
 
   //~~~ if real user (non- AI) is playing, execute ~~~//
   if (aiPlayer === undefined) {
@@ -132,11 +163,6 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
     } else {
       position = tile.startPosition();
     };
-
-    //~~~~~ If game over, do nothing ~~~~~//
-    // if(this.isGameOver()) {
-    //   return;
-    // };
   };
 
 
@@ -242,16 +268,26 @@ Game.prototype.testIfWon = function(position, color) {
       rangeLow  = this.winColor - 1.5;
   console.log(rangeHigh, rangeLow);
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
-  console.log("testing for win...");
     if (color >= rangeLow && color <= rangeHigh) {
+      this.gameOver = true;
+      this.won      = true;
+      this.wins     +=1;
+      if (this.wins === this.rounds) {
+        this.setting +=1;
+        this.wins    = 0;
+      }
+      this.renderer.renderMessage(true);
       console.log("you win!");
       console.log(color);
+      console.log(this.wins);
     } else if (color >= rangeLow || color <= rangeHigh) {
+      this.gameOver = true;
+      this.renderer.renderMessage(false);
       console.log("you lost!");
       console.log(color);
+      console.log(this.wins);
     };
   };
-
 };
 
 Game.prototype.getPreviewColors = function(position) {
@@ -319,11 +355,13 @@ Game.prototype.reverseAverage = function(color1, color2) {
 //~~~ Serialize and save current game state  ~~~//
 Game.prototype.serializeState = function() {
   var currGame = {
-    board: this.board.serializeBoard(),
-    moves: this.data.moves,
-    score: this.score,
-    wins:  this.wins,
-    level: this.level
+    board:     this.board.serializeBoard(),
+    moves:     this.data.moves,
+    score:     this.score,
+    wins:      this.wins,
+    level:     this.level,
+    userMoves: this.userMoves,
+    setting:   this.setting
   };
   return currGame;
 };
@@ -419,19 +457,3 @@ Game.prototype.executeMove = function(difficulty) {
     this.moveUser(moves[Math.floor(Math.random() * 2)], true);
   };
 };
-
-// dupe board
-// gen random moves
-// move
-// check in you're in winning square
-// if not do again
-// if so: set win color
-
-// 1: { scale: 0.75, size: 2 },
-// 2: { scale: 0.70, size: 2 },
-// 3: { scale: 0.65, size: 3 },
-// 4: { scale: 0.60, size: 3 },
-// 5: { scale: 0.55, size: 4 },
-// 6: { scale: 0.50, size: 4 },
-// 7: { scale: 0.45, size: 5 },
-// 8: { scale: 0.40, size: 5 },

@@ -4,7 +4,6 @@ var express            = require('express'),
     morgan             = require('morgan'),
     session            = require('express-session'),
     url                = 'mongodb://localhost:27017/hue_db';
-    // port               = 3000;
 
 // This sets PORT to the process PORT, if it doesn't exist, use local port.
 var PORT = process.env.PORT || 3000;
@@ -41,7 +40,7 @@ db.on('error', function() {
 
 db.once('open', function() {
   console.log("Database up and running");
-  server.listen(PORT, function() {
+  server.listen(3000, function() {
     console.log("Server up and running");
   });
 });
