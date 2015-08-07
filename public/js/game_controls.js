@@ -44,19 +44,38 @@ GameControls.prototype.listeners = function() {
     };
   });
 
+  //~~~ Swipes for mobile ~~~//
+  $(window).on("swiperight", function() {
+    console.log("swipe right working");
+    that.emitter("move", "right");
+  });
+
+  $(window).on("swipeleft", function() {
+    console.log("swipe left working");
+    that.emitter("move", "left");
+  });
+
+  $(window).on("swipeup", function() {
+    console.log("swipe up working");
+    that.emitter("move", "up");
+  });
+
+  $(window).on("swipedown", function() {
+    console.log("swipe down working");
+    that.emitter("move", "down");
+  });
+
+  //~~~ Buttons ~~~//
   $(".retry").on("click", function() {
-    // event.preventDefault();
     console.log("restart click working...");
     that.restart.call(that, event);
   });
 
   $(".next").on("click", function() {
-    // event.preventDefault();
     console.log("next click working...");
     that.nextMap.call(that, event);
   });
 
-  // $(window).on("swipe", );
 };
 
 GameControls.prototype.undo = function(event) {

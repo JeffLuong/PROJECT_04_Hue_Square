@@ -225,6 +225,7 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
 
 //~~~~~ Returns the direction chosen by user  ~~~~~//
 Game.prototype.getDirection = function(direction) {
+  console.log("swiping", direction);
   var directionKeys = {
     "up":    { x:  0, y: -1 },
     "right": { x:  1, y:  0 },
