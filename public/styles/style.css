@@ -271,10 +271,10 @@ a.button:hover {
 /**************** MEDIA QUERIES ****************/
 @media screen and (max-width: 520px) {
   #main-container {
-    width: 320px;
+    width: 380px;
   }
 
   #board-container {
-    height: 320px;
+    height: 380px;
   }
 }
