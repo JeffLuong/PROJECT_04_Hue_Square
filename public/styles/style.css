@@ -3,6 +3,7 @@
 * {
   font: inherit;
   box-sizing: border-box;
+  -oz-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -25,7 +26,8 @@ p {
 }
 
 #main-container {
-  margin: 30px auto 0;
+  margin: 0 auto;
+  padding-top: 20px;
   width: 500px;
   transition: width .25s ease-out;
 }
@@ -266,12 +268,12 @@ a.button:hover {
   font-weight: 500;
 }
 
-.ui-icon-loading + h1 {
+/*.ui-icon-loading + h1 {
   display: none;
-}
+}*/
 
 /**************** MEDIA QUERIES ****************/
-@media screen and (max-width: 520px) {
+@media (max-width: 520px) {
   #main-container {
     width: 300px;
   }
@@ -280,3 +282,8 @@ a.button:hover {
     height: 300px;
   }
 }
+
+/*********** FOR UI WIDGET OVERLAY ************/
+/*.ui-mobile-viewport {
+  width: auto;
+}*/
