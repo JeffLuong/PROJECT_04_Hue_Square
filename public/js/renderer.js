@@ -159,8 +159,6 @@ GameRenderer.prototype.renderMessage = function(won) {
   }
 
   this.$messageContainer.addClass("game-over");
-  // $(".next").addClass("game-over");
-  // $(".retry").addClass("game-over");
   $(".game-message > p").text(message);
 
 };

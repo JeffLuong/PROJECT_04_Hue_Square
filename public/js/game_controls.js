@@ -55,6 +55,8 @@ GameControls.prototype.listeners = function() {
     console.log("next click working...");
     that.nextMap.call(that, event);
   });
+
+  // $(window).on("swipe", );
 };
 
 GameControls.prototype.undo = function(event) {
