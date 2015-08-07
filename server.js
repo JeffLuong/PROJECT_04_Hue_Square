@@ -1,6 +1,5 @@
 var express            = require('express'),
     server             = express(),
-    mongoose           = require('mongoose'),
     morgan             = require('morgan'),
     session            = require('express-session');
     // url                = 'mongodb://localhost:27017/hue_db';
