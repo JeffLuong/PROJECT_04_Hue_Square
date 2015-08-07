@@ -3,6 +3,8 @@ var express            = require('express'),
     morgan             = require('morgan'),
     session            = require('express-session');
 
+var PORT = process.env.PORT || 3000;
+
 // MORGAN ERROR DETECTION
 server.use(morgan('short'));
 
@@ -25,6 +27,6 @@ server.get('/about', function(req, res) {
   res.render('about');
 });
 
-server.listen(3000, function() {
+server.listen(PORT, function() {
   console.log("Server up and running");
 });
