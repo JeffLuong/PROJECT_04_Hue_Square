@@ -97,21 +97,6 @@ GameRenderer.prototype.undoUser = function(currPos, color) {
   });
 };
 
-// GameRenderer.prototype.renderGoal = function(position, color) {
-  // var $goal    = $("<div id='game-goal'>"),
-    // var  $winTile = $(".tile-position-" + (position.x + 1) + "-" + (position.y + 1));
-
-  // console.log($goal, $winTile);
-  // $goal.css({
-  //   "background-color": "hsl(" + color + ", 75%, 60%)"
-  // });
-
-  // document.getElementById("game-goal").style.backgroundColor = color;
-// console.log(document.getElementById("game-goal"));
-  // console.log("appending goal");
-  // $winTile.append($goal);
-// };
-
 GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   //~~~ Select all previous previews: if any exists ~~~//
   var $lastPreview = $(".preview"),

@@ -274,7 +274,7 @@ a.button:hover {
 }
 
 /**************** MEDIA QUERIES ****************/
-@media (max-width: 520px) {
+@media handheld, screen and (max-width: 520px) {
   #main-container {
     width: 300px;
   }
