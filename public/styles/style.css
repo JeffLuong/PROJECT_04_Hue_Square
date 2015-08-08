@@ -129,7 +129,8 @@ p {
   margin-top: 10px;
 }
 
-.game-goal {
+#game-goal {
+  z-index: 3;
   color: white;
   font-size: 3em;
   display: flex;
@@ -150,7 +151,7 @@ p {
   text-align: center;
 }
 
-.game-goal::after {
+#game-goal::after {
   margin: auto;
   /*line-height: 3.5em;*/
   content: "+";
@@ -268,9 +269,9 @@ a.button:hover {
   font-weight: 500;
 }
 
-/*.ui-icon-loading + h1 {
+.ui-icon-loading + h1 {
   display: none;
-}*/
+}
 
 /**************** MEDIA QUERIES ****************/
 @media (max-width: 520px) {

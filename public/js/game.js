@@ -41,11 +41,12 @@ Game.prototype.initiate = function(setting) {
     this.movedFromStart   = false;
     this.aiMovedFromStart = false;
     this.userMoves        = 0;
+    this.winColor;
     this.makeTiles();
     this.initUser();
-    this.renderer.initBoard(this.size, this.gameBoard, this.userTile);
-    this.getPreviewColors(this.getStartPosition());
     this.genSolution(this.currLevel);
+    this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
+    this.getPreviewColors(this.getStartPosition());
   // };
 };
 
@@ -442,7 +443,7 @@ Game.prototype.genSolution = function(difficulty) {
 
   this.winColor = this.returnColor(this.winPoint, this.dupeBoard);
   console.log(this.winPoint, this.winColor);
-  this.renderer.renderGoal(this.winPoint, this.winColor);
+  // this.renderer.renderGoal(this.winPoint, this.winColor);
 };
 
 Game.prototype.executeMove = function(difficulty) {

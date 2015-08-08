@@ -6,8 +6,8 @@ function GameRenderer() {
 };
 
 //~~~~~~ Render start gameboard ~~~~~~//
-GameRenderer.prototype.initBoard = function(size, board, userTile) {
-  this.makeRows(size, board);
+GameRenderer.prototype.initBoard = function(size, board, userTile, winColor) {
+  this.makeRows(size, board, winColor);
   this.updateBoard(board, userTile, null, null);
 };
 
@@ -24,7 +24,7 @@ GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor)
 };
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
-GameRenderer.prototype.makeRows = function(size, board) {
+GameRenderer.prototype.makeRows = function(size, board, winColor) {
   for (var y = 0; y < size; y++) {
     var $row = $("<div class='board-row " + "row" + (y + 1) + "'>");
 
@@ -34,8 +34,17 @@ GameRenderer.prototype.makeRows = function(size, board) {
         "width": "calc(100% / " + size + ")"
       });
       //~~~~~~ Render the tiles inside the squares ~~~~~~//
-      var tile  = this.renderTiles(board, y, x);
-      $sq.append(tile);
+      var $tile  = this.renderTiles(board, y, x);
+
+      //~~~ If the last tile is being made, create and append goal color ~~~//
+      if ((x === (size - 1)) && (y === (size - 1))) {
+        var $goal = $("<div id='game-goal'>");
+        $goal.css({
+          "background-color": "hsl(" + winColor + ", 75%, 60%)"
+        })
+        $tile.append($goal);
+      };
+      $sq.append($tile);
       $row.append($sq);
     };
 
@@ -88,15 +97,20 @@ GameRenderer.prototype.undoUser = function(currPos, color) {
   });
 };
 
-GameRenderer.prototype.renderGoal = function(position, color) {
-  var $goal    = $("<div class='game-goal'>"),
-      $winTile = $(".tile-position-" + (position.x + 1) + "-" + (position.y + 1));
+// GameRenderer.prototype.renderGoal = function(position, color) {
+  // var $goal    = $("<div id='game-goal'>"),
+    // var  $winTile = $(".tile-position-" + (position.x + 1) + "-" + (position.y + 1));
 
-  $goal.css({
-    "background-color": "hsl(" + color + ", 75%, 60%"
-  });
-  $winTile.append($goal);
-};
+  // console.log($goal, $winTile);
+  // $goal.css({
+  //   "background-color": "hsl(" + color + ", 75%, 60%)"
+  // });
+
+  // document.getElementById("game-goal").style.backgroundColor = color;
+// console.log(document.getElementById("game-goal"));
+  // console.log("appending goal");
+  // $winTile.append($goal);
+// };
 
 GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   //~~~ Select all previous previews: if any exists ~~~//
