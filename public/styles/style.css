@@ -235,6 +235,9 @@ p {
 
 .game-goal {
   transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -oz-transform: rotate(45deg);
   z-index: 3;
   color: white;
   margin: auto;
@@ -247,6 +250,9 @@ p {
 
 .rotate {
   transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+  -moz-transform: rotate(0deg);
+  -oz-transform: rotate(0deg);
   height: 35%;
 }
 
