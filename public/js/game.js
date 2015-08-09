@@ -7,7 +7,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting  = 5; // refers to difficulty level
+  this.setting  = 1; // refers to difficulty level
   this.score    = 0;
   this.wins     = 0;
   this.rounds   = 3;
@@ -58,8 +58,6 @@ Game.prototype.initLevels = function() {
         4: { scale: 0.90, size: 5 },
         5: { scale: 0.92, size: 6 },
         6: { scale: 0.94, size: 7 },
-        7: { scale: 0.95, size: 8 },
-        8: { scale: 0.96, size: 9 },
         winPoint: function(level) {
           console.log("returning win point...");
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
@@ -280,14 +278,18 @@ Game.prototype.testIfWon = function(position, color) {
         this.wins    = 0;
       }
       this.renderer.rotateGoal(false, true);
-      this.renderer.renderMessage(true);
-      console.log("you win!");
-      console.log(color);
-      console.log(this.wins);
+      if (this.setting === 8 && this.wins === 3) {
+        this.renderer.renderMessage(true, true)
+      } else {
+        this.renderer.renderMessage(true, false);
+        console.log("you win!");
+        console.log(color);
+        console.log(this.wins);
+      }
     } else if (color >= rangeLow || color <= rangeHigh) {
       this.gameOver = true;
       this.renderer.rotateGoal(false, false);
-      this.renderer.renderMessage(false);
+      this.renderer.renderMessage(false, false);
       console.log("you lost!");
       console.log(color);
       console.log(this.wins);

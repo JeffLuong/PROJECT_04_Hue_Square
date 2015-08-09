@@ -155,25 +155,29 @@ GameRenderer.prototype.findColorRange = function(color1, color2) {
   };
 };
 
-GameRenderer.prototype.renderMessage = function(won) {
+GameRenderer.prototype.renderMessage = function(wonRound, wonGame) {
   console.log("rendering message...");
-  var message = won ? "You Win!" : "You Lost!",
-      options = won ? "next"     : "retry",
+  var message = wonRound ? "You Win!" : "You Lost!",
+      winGame = "You beat the game!",
+      options = wonRound ? "next"     : "retry",
       $retry  = $(".retry"),
       $next   = $(".next");
 
-  if (won) {
-    $(".game-goal").fadeOut(300);
+  if (wonRound && !wonGame) {
     $retry.text("play again");
     $next.text("next puzzle");
-  } else {
+    $(".game-message > p").text(message);
+  } else if (!wonRound && !wonGame) {
     $next.text("skip puzzle");
     $retry.text("try again");
+    $(".game-message > p").text(message);
+  } else if (wonRound && wonGame) {
+    $retry.remove();
+    $next.remove();
+    $(".game-message > p").text(winGame);
   }
 
   this.$messageContainer.addClass("game-over");
-  $(".game-message > p").text(message);
-
 };
 
 GameRenderer.prototype.clearMessage = function() {
