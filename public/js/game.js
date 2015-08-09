@@ -7,7 +7,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting  = 1; // refers to difficulty number inserted by user
+  this.setting  = 5; // refers to difficulty level
   this.score    = 0;
   this.wins     = 0;
   this.rounds   = 3;
@@ -22,7 +22,6 @@ function Game(GameControls, GameRenderer, GameData) {
 
 Game.prototype.initiate = function(setting) {
   // var prevState   = this.data.getCurrGame();
-
     this.gameOver = false;
     this.won      = false;
 
@@ -54,13 +53,13 @@ Game.prototype.initLevels = function() {
   var that = this;
   var levels  = {
         1: { scale: 0.75, size: 2 },
-        2: { scale: 0.85, size: 3 },
-        3: { scale: 0.80, size: 3 },
-        4: { scale: 0.95, size: 4 },
-        5: { scale: 0.90, size: 4 },
-        6: { scale: 0.95, size: 5 },
-        7: { scale: 0.90, size: 5 },
-        8: { scale: 0.95, size: 6 },
+        2: { scale: 0.80, size: 3 },
+        3: { scale: 0.85, size: 4 },
+        4: { scale: 0.90, size: 5 },
+        5: { scale: 0.92, size: 6 },
+        6: { scale: 0.94, size: 7 },
+        7: { scale: 0.95, size: 8 },
+        8: { scale: 0.96, size: 9 },
         winPoint: function(level) {
           console.log("returning win point...");
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
@@ -105,9 +104,10 @@ Game.prototype.restart = function() {
   };
 
   if (this.won) {
-    this.renderer.renderGoal(this.winPoint, this.winColor);
-  };
-
+    this.renderer.rotateGoal(true, true);
+  } else if (!this.won) {
+    this.renderer.rotateGoal(true, false);
+  }
   this.won = false;
   this.data.moves.undoMoves = [];
   this.data.moves.redoMoves = [];
@@ -125,6 +125,7 @@ Game.prototype.nextMap = function() {
 
 //~~~~~ Randomly generate user start position ~~~~~//
 Game.prototype.getStartPosition = function(size) {
+  //~~~ May use this in different game mode where start and win position is rand ~~//
   // var x        = Math.floor(Math.random() * size),
       // y        = Math.floor(Math.random() * size),
   var x        = 0,
@@ -266,8 +267,8 @@ Game.prototype.findNeighbors = function(position) {
 };
 
 Game.prototype.testIfWon = function(position, color) {
-  var rangeHigh = this.winColor + 1.5,
-      rangeLow  = this.winColor - 1.5;
+  var rangeHigh = this.winColor + 2,
+      rangeLow  = this.winColor - 2;
   console.log(rangeHigh, rangeLow);
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
     if (color >= rangeLow && color <= rangeHigh) {
@@ -278,12 +279,14 @@ Game.prototype.testIfWon = function(position, color) {
         this.setting +=1;
         this.wins    = 0;
       }
+      this.renderer.rotateGoal(false, true);
       this.renderer.renderMessage(true);
       console.log("you win!");
       console.log(color);
       console.log(this.wins);
     } else if (color >= rangeLow || color <= rangeHigh) {
       this.gameOver = true;
+      this.renderer.rotateGoal(false, false);
       this.renderer.renderMessage(false);
       console.log("you lost!");
       console.log(color);
@@ -443,7 +446,6 @@ Game.prototype.genSolution = function(difficulty) {
 
   this.winColor = this.returnColor(this.winPoint, this.dupeBoard);
   console.log(this.winPoint, this.winColor);
-  // this.renderer.renderGoal(this.winPoint, this.winColor);
 };
 
 Game.prototype.executeMove = function(difficulty) {

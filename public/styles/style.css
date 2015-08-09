@@ -41,8 +41,8 @@ p {
 
 #board-container {
   width: 100%;
-  height: 500px;
-  display: none;
+  height: 470px;
+  display: block;
   transition: height .25s ease-out;
 }
 
@@ -86,9 +86,17 @@ p {
   float: left;
 }
 
+.board-sq {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+}
+
 .tile {
-  width: 100%;
-  height: 100%;
+  margin: auto;
+  width: 0;
+  height: 0;
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
@@ -97,17 +105,11 @@ p {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -oz-justify-content: center;
-  transition: all .45s ease-in;
+  transition: all .35s ease-in-out;
 }
 
 .user {
-  /* border-radius: .25em;*/
-  /* width: 102%;*/
-  /* height: 102%;*/
-  margin: auto;
-  position: absolute;
-  /* right: -0.875%;*/
-  /* bottom: -0.875%;*/
+  margin: none;
   z-index: 3;
   -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
   -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
@@ -120,41 +122,152 @@ p {
   border-radius: 100%;
   display: none;
   margin: auto;
-  -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
-  -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
-  box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);
+  -webkit-box-shadow: 2px 4px 19px -1px rgba(0,0,0,0.65);
+  -moz-box-shadow: 2px 4px 19px -1px rgba(0,0,0,0.65);
+  box-shadow: 2px 4px 19px -1px rgba(0,0,0,0.65);
 }
 
-.goal-container {
-  margin-top: 10px;
+.delayX1Y1 {
+  transition-delay: 0s;
 }
 
-#game-goal {
+/** 0.1s delay **/
+.delayX1Y2,
+.delayX2Y1 {
+  transition-delay: 0.1s;
+}
+
+/** 0.2s delay **/
+.delayX1Y3,
+.delayX2Y2,
+.delayX3Y1 {
+  transition-delay: 0.2s;
+}
+
+/** 0.3s delay **/
+.delayX1Y4,
+.delayX2Y3,
+.delayX3Y2,
+.delayX4Y1 {
+  transition-delay: 0.3s;
+}
+
+/** 0.4s delay **/
+.delayX3Y3,
+.delayX2Y4,
+.delayX4Y2,
+.delayX1Y5,
+.delayX5Y1 {
+  transition-delay: 0.4s;
+}
+
+/** 0.5s delay **/
+.delayX3Y4,
+.delayX4Y3,
+.delayX2Y5,
+.delayX5Y2,
+.delayX1Y6,
+.delayX6Y1 {
+  transition-delay: 0.5s;
+}
+
+/** 0.6s delay **/
+.delayX4Y4,
+.delayX3Y5,
+.delayX5Y3,
+.delayX2Y6,
+.delayX6Y2 {
+  transition-delay: 0.6s;
+}
+
+/** 0.7s delay **/
+.delayX4Y5,
+.delayX5Y4,
+.delayX3Y6,
+.delayX6Y3 {
+  transition-delay: 0.7s;
+}
+
+/** 0.8s delay **/
+.delayX5Y5,
+.delayX4Y6,
+.delayX6Y4 {
+  transition-delay: 0.8s;
+}
+
+/** 0.9s delay **/
+.delayX5Y6,
+.delayX6Y5 {
+  transition-delay: 0.9s;
+}
+
+/** 1.0s delay **/
+.delayX6Y6 {
+  transition-delay: 1s;
+}
+
+.animateIn {
+  margin: none;
+  width: 100%;
+  height: 100%;
+}
+
+.game-goal {
+  transform: rotate(45deg);
   z-index: 3;
   color: white;
-  font-size: 3em;
-  display: flex;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -oz-flex;
-  justify-content: center;
-  -webkit-justify-content: center;
-  -moz-justify-content: center;
-  -oz-justify-content: center;
   margin: auto;
-  /* margin-left: calc(100% - 100px);*/
-  /* -webkit-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
-  /* -moz-box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
-  /* box-shadow: 2px 4px 25px -1px rgba(0,0,0,0.65);*/
   width: 35%;
   height: 35%;
   text-align: center;
+  transition: all .25s ease-in-out;
+  display: block !important;
 }
 
-#game-goal::after {
-  margin: auto;
-  /*line-height: 3.5em;*/
-  content: "+";
+.rotate {
+  transform: rotate(0deg);
+  height: 35%;
+}
+
+.shadow {
+   -webkit-box-shadow: 2px 4px 20px -1px rgba(0,0,0,0.50);
+   -moz-box-shadow: 2px 4px 20px -1px rgba(0,0,0,0.50);
+   box-shadow: 2px 4px 20px -1px rgba(0,0,0,0.50);
+   -webkit-animation: fadeOut 250ms ease 750ms;
+   -moz-animation: fadeOut 250ms ease 750ms;
+   animation: fadeOut 250ms ease 750ms;
+   -webkit-animation-fill-mode: both;
+   -moz-animation-fill-mode: both;
+   animation-fill-mode: both;
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .game-message {
@@ -215,7 +328,7 @@ p {
 
 .options {
   width: 100%;
-  padding-top: 25px;
+  padding-top: 40px;
   height: calc(100% / 2);
 }
 
@@ -226,12 +339,6 @@ p {
 }
 
 a.button {
-  /*background-color: darkgray;*/
-  /*-webkit-box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);
-  -moz-box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);
-  box-shadow: 2px 4px 10px -1px rgba(0,0,0,0.5);*/
-  /*width: 150px;
-  height: 50px;*/
   margin: 20px auto 0;
   font-size: 1.25em;
   transition: all .5s ease;
@@ -244,10 +351,10 @@ a.button {
 }
 
 a.button:hover {
-  background-color: white;
-  /*border-bottom: 1px solid lightgray;*/
+  /*background-color: white;*/
+  border-bottom: 1px solid white;
   cursor: pointer;
-  color: darkgray;
+  /*color: darkgray;*/
 }
 
 .game-over {
@@ -276,15 +383,32 @@ a.button:hover {
 /**************** MEDIA QUERIES ****************/
 @media handheld, screen and (max-width: 520px) {
   #main-container {
-    width: 300px;
+    width: 310px;
   }
 
   #board-container {
-    height: 300px;
+    height: 280px;
+  }
+
+  .game-title {
+    font-size: 2em;
+  }
+
+  .game-title :last-child{
+    width: 20px;
+    height: 20px;
+  }
+
+  .game-message p {
+    padding-top: 60px;
+    font-size: 1.5em;
+  }
+
+  a.button {
+    font-size: 1em;
+  }
+
+  .options {
+    padding-top: 20px;
   }
 }
-
-/*********** FOR UI WIDGET OVERLAY ************/
-/*.ui-mobile-viewport {
-  width: auto;
-}*/

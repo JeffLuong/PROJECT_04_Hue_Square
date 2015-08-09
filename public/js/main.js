@@ -1,9 +1,9 @@
 $(document).ready(function() {
   window.game = new Game(GameControls, GameRenderer, GameData);
-  fadeIn();
+  // fadeIn();
 });
 
-function fadeIn () {
-  var $board = $('#board-container');
-$board.fadeIn(500);
-}
+// function fadeIn () {
+//   var $board = $('#board-container');
+// $board.fadeIn(500);
+// }

@@ -25,11 +25,13 @@ GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor)
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
 GameRenderer.prototype.makeRows = function(size, board, winColor) {
+  var windowSize = $(window).width();
+
   for (var y = 0; y < size; y++) {
-    var $row = $("<div class='board-row " + "row" + (y + 1) + "'>");
+    var $row = $("<div class='board-row row" + (y + 1) + "'>");
 
     for (var x = 0; x < size; x++) {
-      var $sq   = $("<div class='board-sq " + "square" + (x + 1) + "'>");
+      var $sq   = $("<div class='board-sq square" + (x + 1) + "'>");
       $sq.css({
         "width": "calc(100% / " + size + ")"
       });
@@ -38,10 +40,12 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
 
       //~~~ If the last tile is being made, create and append goal color ~~~//
       if ((x === (size - 1)) && (y === (size - 1))) {
-        var $goal = $("<div id='game-goal'>");
+        var $goal = $("<div class='game-goal shadow'>");
+
         $goal.css({
           "background-color": "hsl(" + winColor + ", 75%, 60%)"
-        })
+        });
+
         $tile.append($goal);
       };
       $sq.append($tile);
@@ -54,6 +58,16 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
     //~~ APPEND EACH TILE INDIVIDUALLY WITH DELAY? ~~//
     this.$boardContainer.append($row);
   };
+  setTimeout(function() {
+    for (var y = 0; y < size; y++) {
+      for (var x = 0; x < size; x++) {
+        var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1));
+        console.log($eachTile);
+        $eachTile.addClass("delayX" + (x + 1) + "Y" + (y + 1));
+        $eachTile.addClass("animateIn");
+      };
+    }
+  }, 250);
 };
 
 //~~~~~~ Dynamically adds color attribute to tiles ~~~~~~//
@@ -165,3 +179,25 @@ GameRenderer.prototype.renderMessage = function(won) {
 GameRenderer.prototype.clearMessage = function() {
   this.$messageContainer.removeClass("game-over");
 };
+
+GameRenderer.prototype.rotateGoal = function(restart, won) {
+  if (!restart && won) {
+    $(".game-goal").addClass("rotate");
+    setTimeout(function() {
+      $(".game-goal").removeClass("shadow");
+    },750);
+  } else if (restart && won) {
+    $(".game-goal").removeClass("rotate");
+    setTimeout(function() {
+      $(".game-goal").addClass("shadow");
+    },500);
+  } else if (!restart && !won){
+    setTimeout(function() {
+      $(".game-goal").removeClass("shadow");
+    },750);
+  } else if (restart && !won) {
+    setTimeout(function() {
+      $(".game-goal").addClass("shadow");
+    },500);
+  }
+}
