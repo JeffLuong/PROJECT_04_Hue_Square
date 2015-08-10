@@ -7,7 +7,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting  = 1; // refers to difficulty level
+  this.setting  = 2; // refers to difficulty level
   this.score    = 0;
   this.wins     = 0;
   this.rounds   = 3;
