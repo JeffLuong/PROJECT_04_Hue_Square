@@ -18,10 +18,9 @@ GameRenderer.prototype.removeGameBoard = function(board) {
   this.clearMessage();
 }
 
-//~~~~~~ Update gameboard ~~~~~~//
-// GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor) {
-//   this.renderUser(userTile, newPosition, mixedColor);
-// };
+GameRenderer.prototype.renderMoveCount = function(count) {
+  $(".moves").text(count);
+}
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
 GameRenderer.prototype.makeRows = function(size, board, winColor) {

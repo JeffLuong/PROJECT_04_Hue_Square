@@ -47,6 +47,7 @@ Game.prototype.initiate = function(setting) {
     this.initUser();
     this.genSolution(this.currLevel);
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
+    this.renderer.renderMoveCount(this.userMoves);
     this.getPreviewColors(this.getStartPosition());
   // };
 };
@@ -227,6 +228,8 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
     this.movedFromStart = true;
     this.updateGame(lastMove, nextPosition, mixedColor);
     this.testIfWon(nextPosition, mixedColor);
+    this.userMoves +=1;
+    this.renderer.renderMoveCount(this.userMoves);
   };
 };
 
@@ -412,6 +415,8 @@ Game.prototype.undo = function() {
   this.renderer.undoUser(lastMove.currPosition, unMixedColor);
   this.renderer.renderUser(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
   this.getPreviewColors(lastMove.lastPosition);
+  this.userMoves -=1;
+  this.renderer.renderMoveCount(this.userMoves);
 };
 
 Game.prototype.redo = function() {
@@ -441,6 +446,8 @@ Game.prototype.redo = function() {
   this.renderer.undoUser(redoLast.lastPosition, redoLast.lastColor);
   this.renderer.renderUser(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
   this.getPreviewColors(redoLast.currPosition);
+  this.userMoves +=1;
+  this.renderer.renderMoveCount(this.userMoves);
 };
 
 //~~~~~~ AI PLAY ~~~~~~//

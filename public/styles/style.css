@@ -49,6 +49,8 @@ p {
 .game-title {
   font-size: 4.5em;
   padding-left: 15px;
+  width: 70%;
+  display: inline-block;
 }
 
 .game-title span:first-child {
@@ -74,6 +76,25 @@ p {
   /* -webkit-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
    -moz-box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);
    box-shadow: 1px 1px 14px 0px rgba(92,92,92,1);*/
+}
+
+.game-moves {
+  text-align: center;
+  padding: 10px 0 0;
+  margin-right: 15px;
+  width: 75px;
+  height: 75px;
+  float: right;
+  background-color: #E91E63;
+}
+
+.game-moves p {
+  font-size: 1.25em;
+  color: white;
+}
+
+.game-moves p + p {
+  font-size: 1.75em;
 }
 
 .board-row {
@@ -496,5 +517,32 @@ a.button:hover {
 
   .options {
     padding-top: 20px;
+  }
+
+  .redo, .undo {
+    font-size: 1.25em;
+  }
+
+  .restart {
+    font-size: 1em;
+  }
+
+  .game-moves {
+    padding: 5px 0 0;
+    width: 45px;
+    height: 45px;
+  }
+
+  .game-moves p {
+    font-size: .85em;
+    color: white;
+  }
+
+  .game-moves p + p {
+    font-size: 1em;
+  }
+
+  .game-instructions p {
+    font-size: .85em;
   }
 }
