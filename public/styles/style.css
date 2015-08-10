@@ -200,9 +200,13 @@ p {
   cursor: pointer;
 }
 
-/*.restart-button:hover {
-  border-bottom: 1px solid #E91E63;
-}*/
+.undo-button:hover {
+  transform: rotate(-360deg);
+}
+
+.restart-button:hover, .redo-button:hover {
+  transform: rotate(360deg);
+}
 
 .delayX1Y1 {
   transition-delay: 0s;
@@ -558,7 +562,6 @@ a.button:hover {
 
   .game-moves p, .game-levels p {
     font-size: .85em;
-    color: white;
   }
 
   .game-moves p + p, .game-levels p + p {
