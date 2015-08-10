@@ -490,12 +490,26 @@ a.button:hover {
   border-bottom: 1px solid lightgray;
 }
 
+.game-instructions p:first-child {
+  color: #0298db;
+}
+
+.game-instructions p:nth-child(2) {
+  color: #E91E63;
+}
+
 .game-instructions p:last-child {
+  color: #0298db;
   border-bottom: none;
 }
 
 .game-instructions p span {
+  color: #0298db;
   font-weight: 500;
+}
+
+.game-instructions p:last-child span {
+  color: #E91E63;
 }
 
 .ui-icon-loading + h1 {

@@ -1,5 +1,4 @@
 function GameData() {
-  console.log("game data being stored...");
   this.moves = {
     undoMoves: [],
     redoMoves: []

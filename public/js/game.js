@@ -55,12 +55,12 @@ Game.prototype.initiate = function(setting) {
 Game.prototype.initLevels = function() {
   var that = this;
   var levels  = {
-        1: { scale: 0.75, size: 2 },
-        2: { scale: 0.80, size: 3 },
-        3: { scale: 0.85, size: 4 },
-        4: { scale: 0.90, size: 5 },
-        5: { scale: 0.92, size: 6 },
-        6: { scale: 0.94, size: 7 },
+        1: { scale: 0.80, size: 2, moveRange: { min: 2, max: 4} }, //moveRange is num of moves ai takes
+        2: { scale: 0.85, size: 3, moveRange: { min: 3, max: 6} }, //moveRange is num of moves ai takes
+        3: { scale: 0.90, size: 4, moveRange: { min: 4, max: 8} }, //moveRange is num of moves ai takes
+        4: { scale: 0.92, size: 5, moveRange: { min: 7, max: 14} }, //moveRange is num of moves ai takes
+        5: { scale: 0.94, size: 6, moveRange: { min: 8, max: 16} }, //moveRange is num of moves ai takes
+        6: { scale: 0.96, size: 7, moveRange: { min: 10, max: 20} }, //moveRange is num of moves ai takes
         winPoint: function(level) {
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
         }
@@ -382,12 +382,14 @@ Game.prototype.serializeState = function() {
   return currGame;
 };
 
+//~~ update Game ~~//
 Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) {
   this.data.storeMove(lastMove);
   this.renderer.renderUser(lastMove.lastPosition, nextPosition, mixedColor);
   this.data.storeGame(this.serializeState());
 };
 
+//~~ Undo function ~~//
 Game.prototype.undo = function() {
   if (this.gameOver) {
     return;
@@ -419,6 +421,7 @@ Game.prototype.undo = function() {
   this.renderer.renderStats(this.userMoves, this.setting);
 };
 
+//~~ Redo function ~~//
 Game.prototype.redo = function() {
   if (this.gameOver) {
     return;
@@ -468,6 +471,7 @@ Game.prototype.genSolution = function(difficulty) {
   console.log(this.winPoint, this.winColor);
 };
 
+//~~~~~ Play solution ~~~~~//
 Game.prototype.showSolution = function() {
   this.restart();
   var length  = this.aiMoves.length,

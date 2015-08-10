@@ -1,5 +1,4 @@
 function GameRenderer() {
-  console.log("rendering game...");
   this.$gameContainer    = $("#game-container");
   this.$boardContainer   = $("#board-container");
   this.$messageContainer = $(".game-message");
@@ -11,6 +10,7 @@ GameRenderer.prototype.initBoard = function(size, board, userTile, winColor) {
   this.renderUser(board, userTile, null, null);
 };
 
+//~~~~~~ Clears the current gameboard ~~~~~~//
 GameRenderer.prototype.removeGameBoard = function(board) {
   var $rows = $(".board-row");
 
@@ -18,6 +18,7 @@ GameRenderer.prototype.removeGameBoard = function(board) {
   this.clearMessage();
 }
 
+//~~~~~~ Render game stats ~~~~~~//
 GameRenderer.prototype.renderStats = function(count, level) {
   $(".moves").text(count);
   $(".levels").text(level);
@@ -101,6 +102,7 @@ GameRenderer.prototype.renderUser = function(userTile, newPosition, color) {
   };
 };
 
+//~~~~~~ Render undo user moves ~~~~~~//
 GameRenderer.prototype.undoUser = function(currPos, color) {
   var $user = $(".tile-position-" + (currPos.x + 1) + "-" + (currPos.y + 1));
 
@@ -111,6 +113,7 @@ GameRenderer.prototype.undoUser = function(currPos, color) {
   });
 };
 
+//~~~~~~ Render circle previews ~~~~~~//
 GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   //~~~ Select all previous previews: if any exists ~~~//
   var $lastPreview = $(".preview"),
@@ -137,10 +140,12 @@ GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   $lastPreview.remove();
 };
 
+//~~~~~~ Remove previews (used with show solution function) ~~~~~~//
 GameRenderer.prototype.removePreviews = function() {
   $(".preview").remove();
 };
 
+//~~~~~~ Find the ranged difference between two colors ~~~~~~//
 GameRenderer.prototype.findColorRange = function(color1, color2) {
   var range;
 
@@ -159,6 +164,7 @@ GameRenderer.prototype.findColorRange = function(color1, color2) {
   };
 };
 
+//~~~~~~ Render end of game message ~~~~~~//
 GameRenderer.prototype.renderMessage = function(wonRound, wonGame) {
   var message = wonRound ? "You Win!" : "You Lost!",
       winGame = "You beat the game!",
@@ -189,6 +195,7 @@ GameRenderer.prototype.clearMessage = function() {
   this.$messageContainer.removeClass("game-over");
 };
 
+//~~~~~~ Animates goal color ~~~~~~//
 GameRenderer.prototype.rotateGoal = function(restart, won) {
   if (!restart && won) {
     $(".game-goal").addClass("rotate");
