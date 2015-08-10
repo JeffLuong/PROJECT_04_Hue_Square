@@ -95,11 +95,18 @@ p {
   text-align: center;
   padding: 10px 0 0;
   margin-right: 15px;
-  width: 75px;
-  height: 75px;
+  width: 0;
+  height: 0;
   /*display: inline-block;*/
   float: right;
   background-color: #E91E63;
+  transition: all .5s ease-in-out;
+  overflow: hidden;
+}
+
+.animateStats {
+  width: 75px;
+  height: 75px;
 }
 
 .game-moves p, .game-levels p {
@@ -110,6 +117,10 @@ p {
 .game-moves p + p, .game-levels p + p {
   font-size: 1.75em;
 }
+
+/*.animateText {
+  opacity: 1
+}*/
 
 .board-row {
   width: 100%;

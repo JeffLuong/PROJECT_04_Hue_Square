@@ -20,8 +20,16 @@ GameRenderer.prototype.removeGameBoard = function(board) {
 
 //~~~~~~ Render game stats ~~~~~~//
 GameRenderer.prototype.renderStats = function(count, level) {
-  $(".moves").text(count);
-  $(".levels").text(level);
+  setTimeout(function() {
+    $(".game-levels").addClass("animateStats");
+    $(".game-moves").addClass("animateStats");
+  }, 250);
+  setTimeout(function() {
+    $(".moves").text(count);
+    $(".levels").text(level);
+    $(".game-moves p").addClass("animateText");
+    $(".game-levels p").addClass("animateText"); 
+  }, 500);
 }
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
