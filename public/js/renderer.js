@@ -18,8 +18,9 @@ GameRenderer.prototype.removeGameBoard = function(board) {
   this.clearMessage();
 }
 
-GameRenderer.prototype.renderMoveCount = function(count) {
+GameRenderer.prototype.renderStats = function(count, level) {
   $(".moves").text(count);
+  $(".levels").text(level);
 }
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
@@ -57,6 +58,7 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
     //~~ APPEND EACH TILE INDIVIDUALLY WITH DELAY? ~~//
     this.$boardContainer.append($row);
   };
+  //~~ Adds animation for each tile ~~//
   setTimeout(function() {
     for (var y = 0; y < size; y++) {
       for (var x = 0; x < size; x++) {

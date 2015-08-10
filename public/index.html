@@ -16,19 +16,27 @@
   </head>
   <body>
     <div id="main-container">
-      <div class="game-title"><span>h</span><span>u</span><span>e</span><div></div></div>
-      <div class="game-moves">
-        <p>moves</p>
-        <p class="moves"></p>
+      <div class="game-header">
+        <div class="game-title">
+          <span>h</span><span>u</span><span>e</span><div></div>
+        </div>
+        <div class="game-stats-container">
+          <div class="game-moves">
+            <p>moves</p>
+            <p class="moves"></p>
+          </div>
+          <div class="game-levels">
+            <p>level</p>
+            <p class="levels"></p>
+          </div>
+        </div>
       </div>
       <div class="game-menu">
         <div class="undo">
           <i class="fa fa-undo undo-button"></i>
         </div>
         <div class="restart">
-          <div class="restart-button">
-            restart
-          </div>
+          <i class="fa fa-refresh restart-button"></i>
         </div>
         <div class="redo">
           <i class="fa fa-repeat redo-button"></i>
@@ -38,11 +46,11 @@
         <div class="game-message">
           <p></p>
           <div class="options">
-            <div class="left-option">
-              <a class="button next">next puzzle</a>
-            </div>
             <div class="right-option">
               <a class="button retry">try again</a>
+            </div>
+            <div class="left-option">
+              <a class="button next">next puzzle</a>
             </div>
             <div class="bottom-option">
               <a class="button solution">show solution</a>

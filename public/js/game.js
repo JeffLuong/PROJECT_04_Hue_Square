@@ -47,7 +47,7 @@ Game.prototype.initiate = function(setting) {
     this.initUser();
     this.genSolution(this.currLevel);
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
-    this.renderer.renderMoveCount(this.userMoves);
+    this.renderer.renderStats(this.userMoves, this.setting);
     this.getPreviewColors(this.getStartPosition());
   // };
 };
@@ -229,7 +229,7 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
     this.updateGame(lastMove, nextPosition, mixedColor);
     this.testIfWon(nextPosition, mixedColor);
     this.userMoves +=1;
-    this.renderer.renderMoveCount(this.userMoves);
+    this.renderer.renderStats(this.userMoves, this.setting);
   };
 };
 
@@ -274,8 +274,8 @@ Game.prototype.findNeighbors = function(position) {
 };
 
 Game.prototype.testIfWon = function(position, color) {
-  var rangeHigh = this.winColor + 2,
-      rangeLow  = this.winColor - 2;
+  var rangeHigh = this.winColor + 2.25,
+      rangeLow  = this.winColor - 2.25;
   console.log(rangeHigh, rangeLow);
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
     this.gameOver = true;
@@ -416,7 +416,7 @@ Game.prototype.undo = function() {
   this.renderer.renderUser(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
   this.getPreviewColors(lastMove.lastPosition);
   this.userMoves -=1;
-  this.renderer.renderMoveCount(this.userMoves);
+  this.renderer.renderStats(this.userMoves, this.setting);
 };
 
 Game.prototype.redo = function() {
@@ -447,7 +447,7 @@ Game.prototype.redo = function() {
   this.renderer.renderUser(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
   this.getPreviewColors(redoLast.currPosition);
   this.userMoves +=1;
-  this.renderer.renderMoveCount(this.userMoves);
+  this.renderer.renderStats(this.userMoves, this.setting);
 };
 
 //~~~~~~ AI PLAY ~~~~~~//
