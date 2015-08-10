@@ -387,7 +387,6 @@ p {
   font-size: 3em;
   height: calc(100% / 2);
   padding-top: 100px;
-  /*margin: 2.5em 0;*/
   color: white;
 }
 
@@ -449,19 +448,13 @@ a.button {
   color: white;
 }
 
-/*.solution {
-  display: none;
-}*/
-
 .block {
   display: block;
 }
 
 a.button:hover {
-  /*background-color: white;*/
   border-bottom: 1px solid white;
   cursor: pointer;
-  /*color: darkgray;*/
 }
 
 .game-over {
@@ -551,5 +544,23 @@ a.button:hover {
 
   .game-instructions p {
     font-size: .85em;
+  }
+
+  .user {
+    -webkit-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.65);
+    -moz-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.65);
+    box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.65);
+  }
+
+  .preview {
+    -webkit-box-shadow: 2px 4px 8px -1px rgba(0,0,0,0.65);
+    -moz-box-shadow: 2px 4px 8px -1px rgba(0,0,0,0.65);
+    box-shadow: 2px 4px 8px -1px rgba(0,0,0,0.65);
+  }
+
+  .shadow {
+   -webkit-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.50);
+   -moz-box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.50);
+   box-shadow: 2px 3px 10px -1px rgba(0,0,0,0.50);
   }
 }
