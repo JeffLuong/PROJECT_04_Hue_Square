@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title></title>
     <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700|Raleway:500,400,200,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui">
@@ -16,6 +17,19 @@
   <body>
     <div id="main-container">
       <div class="game-title"><span>h</span><span>u</span><span>e</span><div></div></div>
+      <div class="game-menu">
+        <div class="undo">
+          <i class="fa fa-undo undo-button"></i>
+        </div>
+        <div class="restart">
+          <div class="restart-button">
+            restart
+          </div>
+        </div>
+        <div class="redo">
+          <i class="fa fa-repeat redo-button"></i>
+        </div>
+      </div>
       <div id="game-container">
         <div class="game-message">
           <p></p>
@@ -25,6 +39,9 @@
             </div>
             <div class="right-option">
               <a class="button retry">try again</a>
+            </div>
+            <div class="bottom-option">
+              <a class="button solution">show solution</a>
             </div>
           </div>
         </div>

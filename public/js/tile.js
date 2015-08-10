@@ -12,7 +12,6 @@ Tile.prototype.startPosition = function() {
 
 Tile.prototype.saveLastPosition = function(position, aiPlayer) {
   if (aiPlayer === true) {
-    console.log("saving ai last position...");
     this.aiLastPosition = {x: position.x, y: position.y};
   } else {
     this.lastPosition = {x: position.x, y: position.y};

@@ -1,5 +1,4 @@
 function GameControls() {
-  console.log("game controls set...");
   this.events = {};
   this.listeners();
 };
@@ -76,6 +75,21 @@ GameControls.prototype.listeners = function() {
     that.nextMap.call(that, event);
   });
 
+  $(".redo-button").on("click", function() {
+    that.redo.call(that, event);
+  });
+
+  $(".undo-button").on("click", function() {
+    that.undo.call(that, event);
+  });
+
+  $(".restart-button").on("click", function() {
+    that.restart.call(that, event);
+  });
+
+  $(".solution").on("click", function() {
+    that.solution.call(that, event);
+  });
 };
 
 GameControls.prototype.undo = function(event) {
@@ -96,7 +110,12 @@ GameControls.prototype.restart = function(event) {
 GameControls.prototype.nextMap = function(event) {
   event.preventDefault();
   this.emitter("nextMap");
-}
+};
+
+GameControls.prototype.solution = function(event) {
+  event.preventDefault();
+  this.emitter("solution");
+};
 
 GameControls.prototype.emitter = function(event, data) {
   var callbacks = this.events[event];

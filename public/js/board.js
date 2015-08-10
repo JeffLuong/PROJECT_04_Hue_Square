@@ -5,7 +5,6 @@ function Board(gameSize) {
 
 //~~~~~~ Make a board ~~~~~~//
 Board.prototype.makeBoard = function() {
-  console.log("making board...");
   var emptyBoard = [];
 
   for (var x = 0; x < this.size; x++) {
@@ -28,7 +27,7 @@ Board.prototype.dupeBoard = function () {
       duplicateBoard.addTile(duplicateTile);
     };
   };
-  
+
   return duplicateBoard;
 };
 

@@ -127,6 +127,51 @@ p {
   box-shadow: 2px 4px 19px -1px rgba(0,0,0,0.65);
 }
 
+.game-menu {
+  width: 100%;
+  height: 30px;
+  margin-top: 20px;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -oz-justify-content: center;
+}
+
+.redo, .undo, .restart {
+  width: calc(100% / 3);
+  color: #0298db;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -oz-justify-content: center;
+  font-size: 2em;
+}
+
+.restart {
+  font-size: 1.5em;
+}
+
+.redo-button, .undo-button, .restart-button {
+  transition: all .25s ease;
+}
+
+.redo-button:hover, .undo-button:hover, .restart-button:hover {
+  color: #E91E63;
+  cursor: pointer;
+}
+
+.restart-button:hover {
+  border-bottom: 1px solid #E91E63;
+}
+
 .delayX1Y1 {
   transition-delay: 0s;
 }
@@ -249,6 +294,7 @@ p {
 }
 
 .rotate {
+  transition-delay: 0.25s;
   transform: rotate(0deg);
   -webkit-transform: rotate(0deg);
   -moz-transform: rotate(0deg);
@@ -300,7 +346,7 @@ p {
 .game-message {
   display: none;
   position: absolute;
-  background: rgba(219, 218, 238, 0.60);
+  background: rgba(219, 218, 238, 0.5);
   z-index: 100;
   margin: 15px;
   top: 0;
@@ -360,9 +406,15 @@ p {
 }
 
 .left-option, .right-option {
-  width: 50%;
-  height: 100%;
-  float: left;
+  width: 49.5%;
+  height: 50%;
+  display: inline-block;
+}
+
+.bottom-option {
+  width: 100%;
+  height: 50%;
+  display: none;
 }
 
 a.button {
@@ -372,9 +424,16 @@ a.button {
   padding: 5px;
 }
 
-.next, .retry {
+.next, .retry, .solution {
   color: white;
-  /*display: none;*/
+}
+
+/*.solution {
+  display: none;
+}*/
+
+.block {
+  display: block;
 }
 
 a.button:hover {

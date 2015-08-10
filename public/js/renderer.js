@@ -8,7 +8,7 @@ function GameRenderer() {
 //~~~~~~ Render start gameboard ~~~~~~//
 GameRenderer.prototype.initBoard = function(size, board, userTile, winColor) {
   this.makeRows(size, board, winColor);
-  this.updateBoard(board, userTile, null, null);
+  this.renderUser(board, userTile, null, null);
 };
 
 GameRenderer.prototype.removeGameBoard = function(board) {
@@ -19,9 +19,9 @@ GameRenderer.prototype.removeGameBoard = function(board) {
 }
 
 //~~~~~~ Update gameboard ~~~~~~//
-GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor) {
-  this.renderUser(userTile, newPosition, mixedColor);
-};
+// GameRenderer.prototype.updateBoard = function(userTile, newPosition, mixedColor) {
+//   this.renderUser(userTile, newPosition, mixedColor);
+// };
 
 //~~~~~~ Make HTML rows and squares ~~~~~~//
 GameRenderer.prototype.makeRows = function(size, board, winColor) {
@@ -62,7 +62,6 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
     for (var y = 0; y < size; y++) {
       for (var x = 0; x < size; x++) {
         var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1));
-        console.log($eachTile);
         $eachTile.addClass("delayX" + (x + 1) + "Y" + (y + 1));
         $eachTile.addClass("animateIn");
       };
@@ -137,6 +136,10 @@ GameRenderer.prototype.renderPreview = function(board, neighbors, colors) {
   $lastPreview.remove();
 };
 
+GameRenderer.prototype.removePreviews = function() {
+  $(".preview").remove();
+};
+
 GameRenderer.prototype.findColorRange = function(color1, color2) {
   var range;
 
@@ -156,20 +159,20 @@ GameRenderer.prototype.findColorRange = function(color1, color2) {
 };
 
 GameRenderer.prototype.renderMessage = function(wonRound, wonGame) {
-  console.log("rendering message...");
   var message = wonRound ? "You Win!" : "You Lost!",
       winGame = "You beat the game!",
       options = wonRound ? "next"     : "retry",
       $retry  = $(".retry"),
       $next   = $(".next");
 
-  if (wonRound && !wonGame) {
+  if (wonRound && wonGame === false) {
     $retry.text("play again");
     $next.text("next puzzle");
     $(".game-message > p").text(message);
   } else if (!wonRound && !wonGame) {
     $next.text("skip puzzle");
     $retry.text("try again");
+    $(".bottom-option").addClass("block");
     $(".game-message > p").text(message);
   } else if (wonRound && wonGame) {
     $retry.remove();
@@ -181,6 +184,7 @@ GameRenderer.prototype.renderMessage = function(wonRound, wonGame) {
 };
 
 GameRenderer.prototype.clearMessage = function() {
+  $(".bottom-option").removeClass("block");
   this.$messageContainer.removeClass("game-over");
 };
 

@@ -18,6 +18,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.controls.onEvent("nextMap", this.nextMap.bind(this));
   this.controls.onEvent("undo", this.undo.bind(this));
   this.controls.onEvent("redo", this.redo.bind(this));
+  this.controls.onEvent("solution", this.showSolution.bind(this));
 };
 
 Game.prototype.initiate = function(setting) {
@@ -40,6 +41,7 @@ Game.prototype.initiate = function(setting) {
     this.movedFromStart   = false;
     this.aiMovedFromStart = false;
     this.userMoves        = 0;
+    this.aiMoves          = [];
     this.winColor;
     this.makeTiles();
     this.initUser();
@@ -59,7 +61,6 @@ Game.prototype.initLevels = function() {
         5: { scale: 0.92, size: 6 },
         6: { scale: 0.94, size: 7 },
         winPoint: function(level) {
-          console.log("returning win point...");
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
         }
       };
@@ -101,9 +102,9 @@ Game.prototype.restart = function() {
     this.undo();
   };
 
-  if (this.won) {
+  if (this.won === true) {
     this.renderer.rotateGoal(true, true);
-  } else if (!this.won) {
+  } else if (this.won === false) {
     this.renderer.rotateGoal(true, false);
   }
   this.won = false;
@@ -146,7 +147,7 @@ Game.prototype.insertUser = function(board, position) {
 };
 
 //~~~~~~ Move user Tile ~~~~~~//
-Game.prototype.moveUser = function(direction, aiPlayer) {
+Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
   var position = null,
       vector   = this.getDirection(direction);
   //~~~~~ If game over, do nothing ~~~~~//
@@ -154,6 +155,9 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
     return;
   };
 
+  if (aiMoves) {
+    this.renderer.removePreviews();
+  }
   //~~~ if real user (non- AI) is playing, execute ~~~//
   if (aiPlayer === undefined) {
     this.data.moves.redoMoves = [];
@@ -184,6 +188,7 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
       this.dupeBoard[nextPosition.x][nextPosition.y].color = mixedColor;
       //~~~~~ Save new position as ai position ~~~~~//
       tile.saveLastPosition(nextPosition, true);
+      this.aiMoves.push(direction);
     } else {
       return;
     };
@@ -207,7 +212,9 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
       return;
     };
     //~~~~~ Find neighbors of newest position ~~~~~//
-    this.getPreviewColors(nextPosition);
+    if (aiMoves === undefined) {
+      this.getPreviewColors(nextPosition);
+    }
 
     //~~~ Pass last move made so it can be stored ~~~///
     var lastMove = {
@@ -225,7 +232,6 @@ Game.prototype.moveUser = function(direction, aiPlayer) {
 
 //~~~~~ Returns the direction chosen by user  ~~~~~//
 Game.prototype.getDirection = function(direction) {
-  console.log("swiping", direction);
   var directionKeys = {
     "up":    { x:  0, y: -1 },
     "right": { x:  1, y:  0 },
@@ -269,28 +275,29 @@ Game.prototype.testIfWon = function(position, color) {
       rangeLow  = this.winColor - 2;
   console.log(rangeHigh, rangeLow);
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
+    this.gameOver = true;
     if (color >= rangeLow && color <= rangeHigh) {
-      this.gameOver = true;
       this.won      = true;
       this.wins     +=1;
+      this.renderer.rotateGoal(false, true);
+
       if (this.wins === this.rounds) {
         this.setting +=1;
         this.wins    = 0;
       }
-      this.renderer.rotateGoal(false, true);
+
       if (this.setting === 8 && this.wins === 3) {
         this.renderer.renderMessage(true, true)
       } else {
         this.renderer.renderMessage(true, false);
-        console.log("you win!");
+        console.log(this.won);
         console.log(color);
         console.log(this.wins);
       }
     } else if (color >= rangeLow || color <= rangeHigh) {
-      this.gameOver = true;
       this.renderer.rotateGoal(false, false);
+      console.log(this.won);
       this.renderer.renderMessage(false, false);
-      console.log("you lost!");
       console.log(color);
       console.log(this.wins);
     };
@@ -302,12 +309,11 @@ Game.prototype.getPreviewColors = function(position) {
       length         = neighbors.length,
       previewColors = [];
 
-  // console.log("getting preview colors...");
   for (var i = 0; i < length; i++) {
     var color = this.findAverage(this.gameBoard[position.x][position.y].color, this.returnColor(neighbors[i], this.gameBoard));
     previewColors.push(color);
   };
-  // console.log(previewColors);
+
   this.renderer.renderPreview(this.gameBoard, neighbors, previewColors);
 };
 
@@ -375,12 +381,14 @@ Game.prototype.serializeState = function() {
 
 Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) {
   this.data.storeMove(lastMove);
-  this.renderer.updateBoard(lastMove.lastPosition, nextPosition, mixedColor);
+  this.renderer.renderUser(lastMove.lastPosition, nextPosition, mixedColor);
   this.data.storeGame(this.serializeState());
-  console.log(this.data.moves.undoMoves);
 };
 
 Game.prototype.undo = function() {
+  if (this.gameOver) {
+    return;
+  }
   //~~~ Return if there are no undo moves in stored ~~~//
   if (this.data.moves.undoMoves.length === 0) {
     return;
@@ -402,11 +410,15 @@ Game.prototype.undo = function() {
   this.gameBoard[lastMove.currPosition.x][lastMove.currPosition.y].color = unMixedColor;
   //~~~ Render changes ~~~//
   this.renderer.undoUser(lastMove.currPosition, unMixedColor);
-  this.renderer.updateBoard(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
+  this.renderer.renderUser(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
   this.getPreviewColors(lastMove.lastPosition);
 };
 
 Game.prototype.redo = function() {
+  if (this.gameOver) {
+    return;
+  }
+
   //~~~ Return if there are no redo moves in stored ~~~//
   if (this.data.moves.redoMoves.length === 0) {
     return;
@@ -427,7 +439,7 @@ Game.prototype.redo = function() {
   this.gameBoard[redoLast.lastPosition.x][redoLast.lastPosition.y].color = redoLast.lastColor;
   //~~~ Render changes ~~~//
   this.renderer.undoUser(redoLast.lastPosition, redoLast.lastColor);
-  this.renderer.updateBoard(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
+  this.renderer.renderUser(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
   this.getPreviewColors(redoLast.currPosition);
 };
 
@@ -439,27 +451,43 @@ Game.prototype.genSolution = function(difficulty) {
   this.winPoint     = this.levels.winPoint(this.setting);
 
   while (true) {
-    console.log("executing move again...");
-    this.executeMove(difficulty);
+    var move = this.executeMove(difficulty);
     if ((tile.aiLastPosition.x === this.winPoint.x) && (tile.aiLastPosition.y === this.winPoint.y)) {
       break;
     };
   };
-
+  console.log(this.aiMoves);
   this.winColor = this.returnColor(this.winPoint, this.dupeBoard);
   console.log(this.winPoint, this.winColor);
 };
 
+Game.prototype.showSolution = function() {
+  this.restart();
+  var length  = this.aiMoves.length,
+      that    = this,
+      timeout = 10;
+
+  for (var i = 0; i < length; i++) {
+    (function(i) {
+      setTimeout(function() {
+        console.log(that.aiMoves[i]);
+        that.moveUser(that.aiMoves[i], undefined, true);
+      }, 750 + (750 * i));
+    })(i);
+  };
+};
+
 Game.prototype.executeMove = function(difficulty) {
-  console.log("executing move...");
   var chance  = Math.random(),
       move    = null;
 
   if (chance < difficulty.scale) {
     var moves = ["right", "down"];
-    this.moveUser(moves[Math.floor(Math.random() * 2)], true);
+        move  = moves[Math.floor(Math.random() * 2)];
+    this.moveUser(move, true, null);
   } else {
     var moves = ["up", "left"];
-    this.moveUser(moves[Math.floor(Math.random() * 2)], true);
+        move  = moves[Math.floor(Math.random() * 2)];
+    this.moveUser(move, true, null);
   };
 };
