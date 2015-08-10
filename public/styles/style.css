@@ -470,13 +470,20 @@ a.button:hover {
 
 .game-instructions {
   margin-top: 20px;
+  padding: 0 15px;
 }
 
 .game-instructions p {
-  padding: 0 15px;
+  padding: 0 15px 15px;
   text-align: center;
   margin-bottom: 15px;
   font-weight: 300px;
+  line-height: 2em;
+  border-bottom: 1px solid lightgray;
+}
+
+.game-instructions p:last-child {
+  border-bottom: none;
 }
 
 .game-instructions p span {
