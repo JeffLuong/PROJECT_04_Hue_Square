@@ -192,7 +192,7 @@ p {
 
 
 .redo-button, .undo-button, .restart-button {
-  transition: all .25s ease;
+  transition: all .35s ease;
 }
 
 .redo-button:hover, .undo-button:hover, .restart-button:hover {
