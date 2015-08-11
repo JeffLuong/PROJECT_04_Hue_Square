@@ -37,7 +37,7 @@
 	left: 0;
 	z-index: 1000;
 	opacity: 0;
-	background-color: rgba(131,131,131, .8);
+	background-color: rgba(78, 78, 78, 0.75);
 	-webkit-transition: all 0.3s;
 	-moz-transition: all 0.3s;
 	transition: all 0.3s;
