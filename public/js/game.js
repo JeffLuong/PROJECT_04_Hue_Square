@@ -10,7 +10,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.setting  = 2; // refers to difficulty level
   this.score    = 0;
   this.wins     = 0;
-  this.rounds   = 3;
+  this.rounds   = 2;
   this.levels   = this.initLevels();
   this.initiate(this.setting);
   this.controls.onEvent("move", this.moveUser.bind(this));
