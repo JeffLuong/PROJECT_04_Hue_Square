@@ -19,9 +19,9 @@
 }
 
 .md-shadow {
-	-webkit-box-shadow: -1px 15px 45px 3px rgba(87,87,87,1);
-	-moz-box-shadow: -1px 15px 45px 3px rgba(87,87,87,1);
-	box-shadow: -1px 15px 45px 3px rgba(87,87,87,1);
+	-webkit-box-shadow: -1px 15px 45px 3px rgba(62, 62, 62 ,1);
+	-moz-box-shadow: -1px 15px 45px 3px rgba(62, 62, 62 ,1);
+	box-shadow: -1px 15px 45px 3px rgba(62, 62, 62 ,1);
 }
 
 .md-show {
