@@ -1,7 +1,7 @@
 ## Hue Game v.1.0.0
 
 ####Play it here:
-[Hue Game](https://hue-the-game.herokuapp.com/)
+#####[Hue Game](https://hue-the-game.herokuapp.com/)
 ----
 
 #### What is Hue?
