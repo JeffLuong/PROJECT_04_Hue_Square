@@ -13,8 +13,28 @@
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.js"></script>
     <script type="text/javascript" src="js/jquery-mobile-swipes.js"></script>
     <link rel="stylesheet" href="styles/style.css" charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="styles/modal.css" />
   </head>
   <body>
+
+    <!--~~~~~~~ MODAL ~~~~~~~-->
+    <div class="md-modal md-effect-2" id="modal-1">
+      <div class="md-content">
+        <h3>How to Play</h3>
+        <div>
+          <p>Move your tile to the diamond. However, you must be the same color as the diamond when you get there!</p>
+          <p>
+            Use the arrow keys or <span>WASD</span> to navigate through the board. <span>R</span> restarts the game, <span>U</span> undos your move, <span>I</span> redos your move!
+          </p>
+          <p>
+            Use the <span>circles</span> to help you decide which direction to go! The circles are "previews" of the new color you will make if you go to that direction!
+            Good luck!
+          </p>
+          <button class="md-close">Got it!</button>
+        </div>
+      </div>
+    </div>
+
     <div id="main-container">
       <div class="game-header">
         <div class="game-title">
@@ -60,18 +80,11 @@
         <div id="board-container"></div>
       </div>
       <div class="game-instructions">
-        <p>
-          Move your tile to the diamond. However, you must be the same color as the diamond when you get there!
-        </p>
-        <p>
-          Use the arrow keys or <span>WASD</span> to navigate through the board. <span>R</span> restarts the game, <span>U</span> undos your move, <span>I</span> redos your move!
-        </p>
-        <p>
-          Use the <span>circles</span> to help you decide which direction to go! The circles are "previews" of the new color you will make if you go to that direction!
-          Good luck!
-        </p>
+        <button class="md-trigger" data-modal="modal-1">INSTRUCTIONS</button>
       </div>
+
     </div>
+    <div class="md-overlay"></div>
     <script type="text/javascript" src="js/board.js"></script>
     <script type="text/javascript" src="js/renderer.js"></script>
     <script type="text/javascript" src="js/game_controls.js"></script>
@@ -79,5 +92,8 @@
     <script type="text/javascript" src="js/tile.js"></script>
     <script type="text/javascript" src="js/game.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/classManager.js"></script>
+    <script type="text/javascript" src="js/modalEffects.js"></script>
+    <script type="text/javascript" src="js/cssParser.js"></script>
   </body>
 </html>
