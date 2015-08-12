@@ -116,10 +116,6 @@ p {
   font-size: 1.75em;
 }
 
-/*.animateText {
-  opacity: 1
-}*/
-
 .board-row {
   width: 100%;
 }
@@ -149,7 +145,7 @@ p {
   -webkit-justify-content: center;
   -moz-justify-content: center;
   -oz-justify-content: center;
-  transition: all .25s ease-in-out;
+  transition: all .175s ease-in-out;
 }
 
 .user {
