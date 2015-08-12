@@ -552,6 +552,21 @@ button:focus {
  outline: none;
 }
 
+.game-notes {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.game-notes .notes p {
+  color: #0298db;
+  font-weight: 400;
+}
+
+.game-notes .notes p a {
+ text-decoration: none;
+ color: #E91E63;
+}
+
 /**************** MEDIA QUERIES ****************/
 @media handheld, screen and (max-width: 520px) {
   #main-container {
