@@ -16,6 +16,7 @@ Hue is a minimalist game that is inspired by Threes, material design, and of cou
 5. CSS3
 6. Node.js
 7. Modal effects by Codrops
+8. Font Awesome
 
 #### User Stories
 ----
