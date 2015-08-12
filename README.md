@@ -1,11 +1,11 @@
-## Hue Game v.1.0.0
+## Hue Square v.1.0.0
 
 ####Play it here: [Hue](https://hue-the-game.herokuapp.com/)
 ----
 
-#### What is Hue?
+#### What is Hue Square?
 ----
-Hue is a minimalist game that is inspired by 2048, material design, and of course, color. It is a color 'averaging' game that allows user to move their tile and 'merge' colors with the neighboring tile. The goal of the game is to be a certain color chosen by the AI at a specific location on the board.
+Hue is a minimalist game that is inspired by Threes, material design, and of course, color. It is a color 'averaging' game that allows user to move their tile and 'merge' colors with the neighboring tile. The goal of the game is to be a certain color chosen by the AI at a specific location on the board.
 
 #### Technology Used
 ----
@@ -15,6 +15,7 @@ Hue is a minimalist game that is inspired by 2048, material design, and of cours
 4. HTML5
 5. CSS3
 6. Node.js
+7. Modal effects by Codrops
 
 #### User Stories
 ----
