@@ -7,11 +7,12 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting  = 1; // refers to difficulty level
-  this.score    = 0;
-  this.wins     = 0;
-  this.rounds   = 3;
-  this.levels   = this.initLevels();
+  this.setting   = 1; // refers to difficulty level
+  this.score     = 0;
+  this.wins      = 0;
+  this.totalWins = 0;
+  this.rounds    = 3;
+  this.levels    = this.initLevels();
   this.initiate(this.setting);
   this.controls.onEvent("move", this.moveUser.bind(this));
   this.controls.onEvent("restart", this.restart.bind(this));
@@ -22,17 +23,17 @@ function Game(GameControls, GameRenderer, GameData) {
 };
 
 Game.prototype.initiate = function(setting) {
-  // var prevState   = this.data.getCurrGame();
+// var prevState     = this.data.getCurrGame();
     this.gameOver = false;
     this.won      = false;
 
-  // if (prevState) {
-    // console.log("getting previous state...");
-    // this.board            = new Board(prevState.board.size, prevState.board.board);
-    // this.score            = prevState.score;
-    // this.wins             = prevState.wins;
-    // this.setting          = prevState.setting;
-    // this.userMoves        = prevState.userMoves;
+  // if (prevState === !{}) {
+  //   console.log("getting previous state...");
+  //   this.board            = new Board(prevState.board.size, prevState.board.board);
+  //   this.score            = prevState.score;
+  //   this.totalWins        = prevState.totalWins;
+  //   this.setting          = prevState.setting;
+  //   this.userMoves        = prevState.userMoves;
   // } else {
     this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
     this.size             = this.currLevel.size;
@@ -41,6 +42,7 @@ Game.prototype.initiate = function(setting) {
     this.movedFromStart   = false;
     this.aiMovedFromStart = false;
     this.userMoves        = 0;
+    this.moves            = { undoMoves: [], redoMoves: []};
     this.aiMoves          = [];
     this.winColor;
     this.makeTiles();
@@ -93,6 +95,7 @@ Game.prototype.initUser = function() {
 
 //~~~~~~  Game re-start ~~~~~~//
 Game.prototype.restart = function() {
+  this.data.deleteGame();
   this.gameOver = false;
   this.renderer.clearMessage();
   var allMoves = this.data.moves.undoMoves,
@@ -280,8 +283,9 @@ Game.prototype.testIfWon = function(position, color) {
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
     this.gameOver = true;
     if (color >= rangeLow && color <= rangeHigh) {
-      this.won      = true;
-      this.wins     +=1;
+      this.won       = true;
+      this.wins      +=1;
+      this.totalWins +=1;
       this.renderer.rotateGoal(false, true);
 
       if (this.wins === this.rounds) {
@@ -293,16 +297,12 @@ Game.prototype.testIfWon = function(position, color) {
         this.renderer.renderMessage(true, true)
       } else {
         this.renderer.renderMessage(true, false);
-        console.log(this.won);
         console.log(color);
-        console.log(this.wins);
       }
     } else if (color >= rangeLow || color <= rangeHigh) {
       this.renderer.rotateGoal(false, false);
-      console.log(this.won);
       this.renderer.renderMessage(false, false);
       console.log(color);
-      console.log(this.wins);
     };
   };
 };
@@ -372,11 +372,11 @@ Game.prototype.reverseAverage = function(color1, color2) {
 Game.prototype.serializeState = function() {
   var currGame = {
     board:     this.board.serializeBoard(),
-    moves:     this.data.moves,
+    moves:     this.moves,
     score:     this.score,
+    totalWins: this.totalWins,
     wins:      this.wins,
-    level:     this.level,
-    userMoves: this.userMoves,
+    // userMoves: this.userMoves,
     setting:   this.setting
   };
   return currGame;
@@ -387,6 +387,7 @@ Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) {
   this.data.storeMove(lastMove);
   this.renderer.renderUser(lastMove.lastPosition, nextPosition, mixedColor);
   this.data.storeGame(this.serializeState());
+
 };
 
 //~~ Undo function ~~//
