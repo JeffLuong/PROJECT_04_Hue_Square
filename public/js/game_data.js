@@ -30,7 +30,7 @@ function GameData() {
   };
   this.gameState;
   this.dupeBoard;
-  this.movesKey = "moves";
+  this.currLvlKey  = "currLvl";
   this.gameKey  = "gameState";
 
   // Test if browser supports window.localStorage
@@ -70,34 +70,21 @@ GameData.prototype.getCurrGame = function() {
 };
 
 GameData.prototype.storeGame = function(game) {
-  console.log("storing game data...");
   this.storage.setItem(this.gameKey, JSON.stringify(game));
-  console.log(this.storage);
 };
 
 GameData.prototype.deleteGameState = function() {
   this.storage.removeItem(this.gameKey);
 };
 
-// Game moves functions
-// GameData.prototype.getMovesMade = function() {
-  // return this.storage.getItem(this.movesKey)userMoves || [];
-// };
+GameData.prototype.storeCurrLevel = function(level) {
+  this.storage.setItem(this.currLvlKey, level);
+}
 
-
-// GameData.prototype.storeMove = function(lastMove) {
-//   this.moves.undoMoves.unshift(lastMove);
-// };
-
-// GameData.prototype.saveMoves = function(moves) {
-//   return this.storage.setData(this.movesKey, moves);
-// };
-
-GameData.prototype.getMoves = function() {
-  return this.storage.setData(this.movesKey) || JSON.stringify({ undoMoves: [], redoMoves: [] });
-};
-
-
+GameData.prototype.getCurrLevel = function() {
+  console.log("saving user's level...", this.storage.getItem(this.currLvlKey));
+  return this.storage.getItem(this.currLvlKey);
+}
 
 //~~~ This is a different game mode...needs to be finished! ~~~//
 // GameData.prototype.generateLevels = function() {

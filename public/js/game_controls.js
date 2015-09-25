@@ -24,7 +24,6 @@ GameControls.prototype.listeners = function() {
 
     if (!modifierKeys) {
       if (key !== undefined) {
-        console.log(key, "pressed");
         event.preventDefault();
         that.emitter("move", key);
       };
