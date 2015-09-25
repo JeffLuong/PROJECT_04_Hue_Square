@@ -45,8 +45,10 @@ var prevState     = this.data.getCurrGame();
     this.moves            = prevState.moves; // this is an object that has undoMoves and redoMoves arrays
     this.userMoves        = this.moves.undoMoves.length;
     this.aiMoves          = prevState.aiMoves;
-    this.wins             = this.userStats.wins || 0;
-    this.totalWins        = this.userStats.totalWins;
+    if (this.userStats) {
+      this.wins           = this.userStats.wins;
+      this.totalWins      = this.userStats.totalWins;
+    }
     this.winColor         = prevState.winColor;
     this.winPoint         = prevState.winPoint;
     this.makeTiles(prevState.board.savedBoard);
