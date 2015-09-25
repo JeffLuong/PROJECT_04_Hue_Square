@@ -23,28 +23,30 @@ function Game(GameControls, GameRenderer, GameData) {
 };
 
 Game.prototype.initiate = function(setting) {
-// var prevState     = this.data.getCurrGame();
+var prevState     = this.data.getCurrGame();
     this.gameOver = false;
     this.won      = false;
 
-  // if (prevState) {
-  //   console.log("getting previous state...");
-  //   console.log(prevState);
-  //   this.board            = new Board(prevState.board.size);
-  //   this.gameBoard        = prevState.board.savedBoard;
-  //   this.size             = prevState.board.size;
-  //   this.movedFromStart   = true;
-  //   this.score            = prevState.score;
-  //   this.totalWins        = prevState.totalWins;
-  //   this.setting          = prevState.setting;
-  //   this.moves            = prevState.moves; // this is an object that has undoMoves and redoMoves arrays
-  //   this.winColor         = prevState.winColor;
-  //   this.makeTiles(prevState.board.savedBoard);
-  //   this.initUser(prevState.savedPosition);
-  //   this.renderer.initBoard(this.size, prevState.board.savedBoard, this.userTile, this.winColor);
-  //   this.renderer.renderStats(this.moves.undoMoves.length, this.setting);
-  //   this.getPreviewColors(prevState.savedPosition);
-  // } else {
+  if (prevState) {
+    console.log("getting previous state...", prevState);
+    this.board            = new Board(prevState.board.size);
+    this.gameBoard        = prevState.board.savedBoard;
+    this.size             = prevState.board.size;
+    this.movedFromStart   = true;
+    this.score            = prevState.score;
+    this.totalWins        = prevState.totalWins;
+    this.setting          = prevState.setting;
+    this.moves            = prevState.moves; // this is an object that has undoMoves and redoMoves arrays
+    this.userMoves        = this.moves.undoMoves.length;
+    this.aiMoves          = prevState.aiMoves;
+    this.winColor         = prevState.winColor;
+    this.winPoint         = prevState.winPoint;
+    this.makeTiles(prevState.board.savedBoard);
+    this.initUser(prevState.savedPosition);
+    this.renderer.initBoard(this.size, prevState.board.savedBoard, this.userTile, this.winColor);
+    this.renderer.renderStats(this.userMoves, this.setting);
+    this.getPreviewColors(prevState.savedPosition);
+  } else {
     this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
     this.size             = this.currLevel.size;
     this.board            = new Board(this.size);
@@ -52,7 +54,7 @@ Game.prototype.initiate = function(setting) {
     this.movedFromStart   = false;
     this.aiMovedFromStart = false;
     this.userMoves        = 0;
-    this.moves            = { undoMoves: [], redoMoves: []};
+    this.moves            = { undoMoves: [], redoMoves: [] };
     this.aiMoves          = [];
     this.winColor;
     this.makeTiles();
@@ -61,7 +63,7 @@ Game.prototype.initiate = function(setting) {
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
     this.renderer.renderStats(this.userMoves, this.setting);
     this.getPreviewColors(this.getStartPosition(this.size));
-  // };
+  };
 
 };
 
@@ -94,6 +96,7 @@ Game.prototype.makeTiles = function(savedBoard) {
     for (var x = 0; x < this.size; x++) {
       if (savedBoard) {
         var color = this.gameBoard[y][x].color;
+        console.log("getting saved board colors...", x, y, color);
       } else {
         var color = this.genColor();
       }
@@ -103,7 +106,6 @@ Game.prototype.makeTiles = function(savedBoard) {
     };
   };
 
-  console.log(this.gameBoard);
 };
 
 //~~~~~~ Initiate user ~~~~~~//
@@ -119,7 +121,7 @@ Game.prototype.initUser = function(savedPosition) {
 
 //~~~~~~  Game re-start ~~~~~~//
 Game.prototype.restart = function() {
-  this.data.deleteGame();
+  this.data.deleteGameState();
   this.gameOver = false;
   this.renderer.clearMessage();
   var allMoves = this.moves.undoMoves,
@@ -160,19 +162,19 @@ Game.prototype.getStartPosition = function(size, savedPosition) {
     var x        = 0,
         y        = 0,
         position = {x: x, y: y},
-        color    = this.gameBoard[x][y].color
+        color    = this.gameBoard[x][y].color;
         tile     = new Tile(position, color);
 
-    console.log(tile);
     return tile.startPosition();
-  } else if (savedPosition){
-    console.log(savedPosition);
+
+  } else if (savedPosition) {
     var x        = savedPosition.x,
         y        = savedPosition.y,
         position = {x: x, y: y},
-        color    = this.gameBoard[x][y].color,
+        color    = this.gameBoard[x][y].color;
         tile     = new Tile(position, color);
-    
+        tile.lastPosition = position;
+
     return tile.startPosition();
   }
 };
@@ -206,10 +208,12 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
     this.moves.redoMoves = [];
     //~~~~~ Get user position ~~~~~//
     if (this.movedFromStart) {
+      console.log("this is hit");
       position = tile.lastPosition;
     } else {
       position = tile.startPosition();
     };
+    console.log(position);
   };
 
 
@@ -241,6 +245,7 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
   //~~~ User moves ~~~//
   if (aiPlayer === undefined) {
     //~~~~~ Move to new position and get new color mix ~~~~~//
+    console.log(position);
     var nextPosition = this.findNextPosition(position, vector);
     var mixedColor;
 
@@ -271,6 +276,7 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
     this.updateGame(lastMove, nextPosition, mixedColor);
     this.testIfWon(nextPosition, mixedColor);
     this.userMoves +=1;
+    console.log(this.userMoves);
     this.renderer.renderStats(this.userMoves, this.setting);
   };
 };
@@ -318,7 +324,7 @@ Game.prototype.findNeighbors = function(position) {
 Game.prototype.testIfWon = function(position, color) {
   var rangeHigh = this.winColor + 2.25,
       rangeLow  = this.winColor - 2.25;
-  console.log(rangeHigh, rangeLow);
+  this.data.deleteGameState();
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
     this.gameOver = true;
     if (color >= rangeLow && color <= rangeHigh) {
@@ -347,8 +353,8 @@ Game.prototype.testIfWon = function(position, color) {
 };
 
 Game.prototype.getPreviewColors = function(position) {
-  var neighbors      = this.findNeighbors(position);
-      length         = neighbors.length,
+  var neighbors     = this.findNeighbors(position);
+      length        = neighbors.length,
       previewColors = [];
 
   for (var i = 0; i < length; i++) {
@@ -410,14 +416,16 @@ Game.prototype.reverseAverage = function(color1, color2) {
 //~~~ Serialize and save current game state  ~~~//
 Game.prototype.serializeState = function(currPosition) {
   var currGame = {
-    board:     this.board.serializeBoard(),
+    board:     this.board.serializeBoard(this.gameBoard),
     moves:     this.moves,
     score:     this.score,
     totalWins: this.totalWins,
     wins:      this.wins,
     setting:   this.setting,
     winColor:  this.winColor,
-    savedPosition: currPosition
+    winPoint:  this.winPoint,
+    savedPosition: currPosition,
+    aiMoves:   this.aiMoves
   };
 
   return currGame;
@@ -460,11 +468,11 @@ Game.prototype.undo = function() {
   this.renderer.undoUser(lastMove.currPosition, unMixedColor);
   this.renderer.renderUser(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
   this.getPreviewColors(lastMove.lastPosition);
+  console.log(this.userMoves);
   this.userMoves -=1;
   this.renderer.renderStats(this.userMoves, this.setting);
   //~~~ serialize game ~~~//
-  console.log(lastMove.lastPosition);
-  this.serializeState(lastMove.lastPosition);
+  this.data.storeGame(this.serializeState(lastMove.lastPosition));
 };
 
 //~~ Redo function ~~//
@@ -501,8 +509,7 @@ Game.prototype.redo = function() {
   this.userMoves +=1;
   this.renderer.renderStats(this.userMoves, this.setting);
   //~~~ serialize game ~~~//
-  console.log(redoLast.currPosition);
-  this.serializeState(redoLast.currPosition);
+  this.data.storeGame(this.serializeState(redoLast.currPosition));
 };
 
 //~~~~~~ AI PLAY ~~~~~~//

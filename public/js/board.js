@@ -48,21 +48,12 @@ Board.prototype.inBounds = function(position) {
 };
 
 //~~~~~~ Serialize current board ~~~~~~//
-Board.prototype.serializeBoard = function() {
-  //~~~~ Create board copy to store ~~~~//
-  var currBoard = [];
-  var currState;
-  for (var x = 0; x < this.size; x++) {
-    var row = currBoard[x] = [];
-    for (var y = 0; y < this.size; y++) {
-      row.push(this.board[x][y]);
-    };
-  };
+Board.prototype.serializeBoard = function(board) {
 
   //~~~ Save current board in object ~~~//
   currState = {
     size: this.size,
-    savedBoard: currBoard
+    savedBoard: board
   };
 
   return currState;

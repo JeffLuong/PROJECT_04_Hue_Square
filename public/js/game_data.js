@@ -75,7 +75,7 @@ GameData.prototype.storeGame = function(game) {
   console.log(this.storage);
 };
 
-GameData.prototype.deleteGame = function() {
+GameData.prototype.deleteGameState = function() {
   this.storage.removeItem(this.gameKey);
 };
 
