@@ -7,8 +7,13 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting   = this.data.getCurrLevel() || 1; // refers to difficulty level...if current player's level is saved, load that
-  console.log(this.setting);
+  this.userStats = this.data.getUserStats();  // check if user stats are stored
+  console.log(this.userStats);
+  if (this.userStats) {
+    this.setting = this.userStats.level; // refers to difficulty level...if current player's level is saved, load that
+  } else {
+    this.setting = 1;
+  }
   this.score     = 0;
   this.wins      = 0;
   this.totalWins = 0;
@@ -24,8 +29,7 @@ function Game(GameControls, GameRenderer, GameData) {
 };
 
 Game.prototype.initiate = function(setting) {
-var prevState     = this.data.getCurrGame(),
-    userLevel     = this.data.getCurrLevel();
+var prevState     = this.data.getCurrGame();
     this.gameOver = false;
     this.won      = false;
 
@@ -38,16 +42,17 @@ var prevState     = this.data.getCurrGame(),
     this.movedFromStart   = true;
     this.score            = prevState.score;
     this.totalWins        = prevState.totalWins;
-    this.setting          = userLevel;
     this.moves            = prevState.moves; // this is an object that has undoMoves and redoMoves arrays
     this.userMoves        = this.moves.undoMoves.length;
     this.aiMoves          = prevState.aiMoves;
+    this.wins             = this.userStats.wins;
+    this.totalWins        = this.userStats.totalWins;
     this.winColor         = prevState.winColor;
     this.winPoint         = prevState.winPoint;
     this.makeTiles(prevState.board.savedBoard);
     this.initUser(prevState.savedPosition);
     this.renderer.initBoard(this.size, prevState.board.savedBoard, this.userTile, this.winColor);
-    this.renderer.renderStats(this.userMoves, this.setting);
+    this.renderer.renderStats(this.userMoves, setting);
     this.getPreviewColors(prevState.savedPosition);
   } else {
     this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
@@ -243,7 +248,6 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
   //~~~ User moves ~~~//
   if (aiPlayer === undefined) {
     //~~~~~ Move to new position and get new color mix ~~~~~//
-    console.log(position);
     var nextPosition = this.findNextPosition(position, vector);
     var mixedColor;
 
@@ -345,6 +349,7 @@ Game.prototype.testIfWon = function(position, color) {
       this.renderer.renderMessage(false, false);
     };
   };
+  console.log(this.wins);
 };
 
 Game.prototype.getPreviewColors = function(position) {
@@ -413,17 +418,20 @@ Game.prototype.serializeState = function(currPosition) {
   var currGame = {
     board:         this.board.serializeBoard(this.gameBoard),
     moves:         this.moves,
-    score:         this.score,
-    totalWins:     this.totalWins,
-    wins:          this.wins,
-    setting:       this.setting,
     winColor:      this.winColor,
     winPoint:      this.winPoint,
     savedPosition: currPosition,
     aiMoves:       this.aiMoves
   };
 
-  this.data.storeCurrLevel(this.setting);
+  var userStats = {
+    totalWins: this.totalWins,
+    level:     this.setting,
+    wins:      this.wins
+  }
+
+  // stores user stats
+  this.data.storeUserStats(userStats);
 
   return currGame;
 };
@@ -536,7 +544,6 @@ Game.prototype.showSolution = function() {
   for (var i = 0; i < length; i++) {
     (function(i) {
       setTimeout(function() {
-        console.log(that.aiMoves[i]);
         that.moveUser(that.aiMoves[i], undefined, true);
       }, 750 + (750 * i));
     })(i);

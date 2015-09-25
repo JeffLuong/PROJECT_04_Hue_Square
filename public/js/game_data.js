@@ -30,8 +30,9 @@ function GameData() {
   };
   this.gameState;
   this.dupeBoard;
-  this.currLvlKey  = "currLvl";
-  this.gameKey  = "gameState";
+  this.currLvlKey   = "currLvl";
+  this.userStatsKey = "stats";
+  this.gameKey      = "gameState";
 
   // Test if browser supports window.localStorage
   var browserSupports = this.isLocalStorageSupported();
@@ -77,14 +78,25 @@ GameData.prototype.deleteGameState = function() {
   this.storage.removeItem(this.gameKey);
 };
 
-GameData.prototype.storeCurrLevel = function(level) {
-  this.storage.setItem(this.currLvlKey, level);
+GameData.prototype.storeUserStats = function(stats) {
+  this.storage.setItem(this.userStatsKey, JSON.stringify(stats));
 }
 
-GameData.prototype.getCurrLevel = function() {
-  console.log("saving user's level...", this.storage.getItem(this.currLvlKey));
-  return this.storage.getItem(this.currLvlKey);
+GameData.prototype.getUserStats = function() {
+  var statsJSON = this.storage.getItem(this.userStatsKey);
+  if (statsJSON) {
+    return JSON.parse(statsJSON);
+  } else {
+    return null;
+  }
 }
+
+// GameData.prototype.getCurrLevel = function() {
+//   console.log("saving user's level...", this.storage.getItem(this.currLvlKey));
+//   return this.storage.getItem(this.currLvlKey);
+// }
+
+
 
 //~~~ This is a different game mode...needs to be finished! ~~~//
 // GameData.prototype.generateLevels = function() {
