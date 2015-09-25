@@ -35,7 +35,6 @@ var prevState     = this.data.getCurrGame();
 
 
   if (prevState) {
-    console.log("getting previous state...", prevState);
     this.board            = new Board(prevState.board.size);
     this.gameBoard        = prevState.board.savedBoard;
     this.size             = prevState.board.size;
