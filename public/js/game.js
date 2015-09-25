@@ -7,7 +7,8 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting   = 1; // refers to difficulty level
+  this.setting   = this.data.getCurrLevel() || 1; // refers to difficulty level...if current player's level is saved, load that
+  console.log(this.setting);
   this.score     = 0;
   this.wins      = 0;
   this.totalWins = 0;
