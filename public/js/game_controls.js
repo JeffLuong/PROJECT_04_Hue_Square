@@ -45,33 +45,27 @@ GameControls.prototype.listeners = function() {
 
   //~~~ Swipes for mobile ~~~//
   $("#board-container").on("swiperight", function() {
-    console.log("swipe right working");
     that.emitter("move", "right");
   });
 
   $("#board-container").on("swipeleft", function() {
-    console.log("swipe left working");
     that.emitter("move", "left");
   });
 
   $("#board-container").on("swipeup", function() {
-    console.log("swipe up working");
     that.emitter("move", "up");
   });
 
   $("#board-container").on("swipedown", function() {
-    console.log("swipe down working");
     that.emitter("move", "down");
   });
 
   //~~~ Buttons ~~~//
   $(".retry").on("click", function() {
-    console.log("restart click working...");
     that.restart.call(that, event);
   });
 
   $(".next").on("click", function() {
-    console.log("next click working...");
     that.nextMap.call(that, event);
   });
 

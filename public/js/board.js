@@ -38,6 +38,7 @@ Board.prototype.position = function(y, x) { //<<< have to pass to x, y reversed
 
 //~~~~~~ Add tile to board with x & y coords ~~~~~~//
 Board.prototype.addTile = function(tile) {
+  console.log("adding tile to board...");
   this.board[tile.x][tile.y] = tile;
 };
 

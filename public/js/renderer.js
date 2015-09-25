@@ -28,7 +28,7 @@ GameRenderer.prototype.renderStats = function(count, level) {
     $(".moves").text(count);
     $(".levels").text(level);
     $(".game-moves p").addClass("animateText");
-    $(".game-levels p").addClass("animateText"); 
+    $(".game-levels p").addClass("animateText");
   }, 500);
 }
 

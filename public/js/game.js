@@ -7,7 +7,7 @@ function Game(GameControls, GameRenderer, GameData) {
   this.baseColors = [
     360, 230, 60
   ];
-  this.setting   = 1; // refers to difficulty level
+  this.setting   = 2; // refers to difficulty level
   this.score     = 0;
   this.wins      = 0;
   this.totalWins = 0;
@@ -27,13 +27,23 @@ Game.prototype.initiate = function(setting) {
     this.gameOver = false;
     this.won      = false;
 
-  // if (prevState === !{}) {
+  // if (prevState) {
   //   console.log("getting previous state...");
-  //   this.board            = new Board(prevState.board.size, prevState.board.board);
+  //   console.log(prevState);
+  //   this.board            = new Board(prevState.board.size);
+  //   this.gameBoard        = prevState.board.savedBoard;
+  //   this.size             = prevState.board.size;
+  //   this.movedFromStart   = true;
   //   this.score            = prevState.score;
   //   this.totalWins        = prevState.totalWins;
   //   this.setting          = prevState.setting;
-  //   this.userMoves        = prevState.userMoves;
+  //   this.moves            = prevState.moves; // this is an object that has undoMoves and redoMoves arrays
+  //   this.winColor         = prevState.winColor;
+  //   this.makeTiles(prevState.board.savedBoard);
+  //   this.initUser(prevState.savedPosition);
+  //   this.renderer.initBoard(this.size, prevState.board.savedBoard, this.userTile, this.winColor);
+  //   this.renderer.renderStats(this.moves.undoMoves.length, this.setting);
+  //   this.getPreviewColors(prevState.savedPosition);
   // } else {
     this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
     this.size             = this.currLevel.size;
@@ -50,8 +60,9 @@ Game.prototype.initiate = function(setting) {
     this.genSolution(this.currLevel);
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
     this.renderer.renderStats(this.userMoves, this.setting);
-    this.getPreviewColors(this.getStartPosition());
+    this.getPreviewColors(this.getStartPosition(this.size));
   // };
+
 };
 
 Game.prototype.initLevels = function() {
@@ -76,20 +87,33 @@ Game.prototype.genColor = function() {
 };
 
 //~~~~~~ Make tiles on back-end ~~~~~~//
-Game.prototype.makeTiles = function() {
+Game.prototype.makeTiles = function(savedBoard) {
+  console.log("making tiles...");
+
   for (var y = 0; y < this.size; y++) {
     for (var x = 0; x < this.size; x++) {
-      var color = this.genColor();
-      var tile  = new Tile(this.board.position(y, x), color);
+      if (savedBoard) {
+        var color = this.gameBoard[y][x].color;
+      } else {
+        var color = this.genColor();
+      }
+      var tile = new Tile(this.board.position(y, x), color);
 
       this.board.addTile(tile);
     };
   };
+
+  console.log(this.gameBoard);
 };
 
 //~~~~~~ Initiate user ~~~~~~//
-Game.prototype.initUser = function() {
-  var startPos = this.getStartPosition(this.size);
+Game.prototype.initUser = function(savedPosition) {
+  var startPos;
+  if (savedPosition) {
+    startPos = this.getStartPosition(this.size, savedPosition);
+  } else {
+    startPos = this.getStartPosition(this.size);
+  }
   this.insertUser(this.gameBoard, startPos);
 };
 
@@ -98,7 +122,7 @@ Game.prototype.restart = function() {
   this.data.deleteGame();
   this.gameOver = false;
   this.renderer.clearMessage();
-  var allMoves = this.data.moves.undoMoves,
+  var allMoves = this.moves.undoMoves,
       length   = allMoves.length;
 
   //~~~ Executes all undos ~~~//
@@ -112,33 +136,48 @@ Game.prototype.restart = function() {
     this.renderer.rotateGoal(true, false);
   }
   this.won = false;
-  this.data.moves.undoMoves = [];
-  this.data.moves.redoMoves = [];
+  this.moves.undoMoves = [];
+  this.moves.redoMoves = [];
 };
 
 //~~~~~~  Game re-start ~~~~~~//
 Game.prototype.nextMap = function() {
   this.gameOver = false;
-  this.data.moves.undoMoves = [];
-  this.data.moves.redoMoves = [];
+  this.moves.undoMoves = [];
+  this.moves.redoMoves = [];
   this.renderer.removeGameBoard();
   this.initiate(this.setting);
   this.won = false;
 };
 
-//~~~~~ Randomly generate user start position ~~~~~//
-Game.prototype.getStartPosition = function(size) {
+//~~~~~ Generate user start position ~~~~~//
+Game.prototype.getStartPosition = function(size, savedPosition) {
   //~~~ May use this in different game mode where start and win position is rand ~~//
   // var x        = Math.floor(Math.random() * size),
       // y        = Math.floor(Math.random() * size),
-  var x        = 0,
-      y        = 0,
-      position = {x: x, y: y},
-      color    = this.gameBoard[x][y].color
-      tile     = new Tile(position, color);
+  console.log("getting start position...");
+  if (savedPosition === undefined) {
+    var x        = 0,
+        y        = 0,
+        position = {x: x, y: y},
+        color    = this.gameBoard[x][y].color
+        tile     = new Tile(position, color);
 
-  return tile.startPosition();
+    console.log(tile);
+    return tile.startPosition();
+  } else if (savedPosition){
+    console.log(savedPosition);
+    var x        = savedPosition.x,
+        y        = savedPosition.y,
+        position = {x: x, y: y},
+        color    = this.gameBoard[x][y].color,
+        tile     = new Tile(position, color);
+    
+    return tile.startPosition();
+  }
 };
+
+
 
 //~~~~~~ Get color from new position ~~~~~~//
 Game.prototype.returnColor = function(position, board) {
@@ -164,7 +203,7 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
   }
   //~~~ if real user (non- AI) is playing, execute ~~~//
   if (aiPlayer === undefined) {
-    this.data.moves.redoMoves = [];
+    this.moves.redoMoves = [];
     //~~~~~ Get user position ~~~~~//
     if (this.movedFromStart) {
       position = tile.lastPosition;
@@ -369,25 +408,26 @@ Game.prototype.reverseAverage = function(color1, color2) {
 };
 
 //~~~ Serialize and save current game state  ~~~//
-Game.prototype.serializeState = function() {
+Game.prototype.serializeState = function(currPosition) {
   var currGame = {
     board:     this.board.serializeBoard(),
     moves:     this.moves,
     score:     this.score,
     totalWins: this.totalWins,
     wins:      this.wins,
-    // userMoves: this.userMoves,
-    setting:   this.setting
+    setting:   this.setting,
+    winColor:  this.winColor,
+    savedPosition: currPosition
   };
+
   return currGame;
 };
 
 //~~ update Game ~~//
-Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) {
-  this.data.storeMove(lastMove);
+Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) { // nextPosition is the current position...
+  this.moves.undoMoves.unshift(lastMove);
   this.renderer.renderUser(lastMove.lastPosition, nextPosition, mixedColor);
-  this.data.storeGame(this.serializeState());
-
+  this.data.storeGame(this.serializeState(nextPosition));
 };
 
 //~~ Undo function ~~//
@@ -396,16 +436,18 @@ Game.prototype.undo = function() {
     return;
   }
   //~~~ Return if there are no undo moves in stored ~~~//
-  if (this.data.moves.undoMoves.length === 0) {
+  if (this.moves.undoMoves.length === 0) {
     return;
-  };
+  }
 
   //~~~ Store undo moves into redo moves array ~~~//
-  if (this.data.moves.undoMoves.length !== 0) {
-    this.data.moves.redoMoves.unshift(this.data.moves.undoMoves[0]);
+  if (this.moves.undoMoves.length !== 0) {
+    console.log("storing undo...");
+    this.moves.redoMoves.unshift(this.moves.undoMoves[0]);
   }
+
   //~~~ Remove last move from undo list ~~~//
-  var lastMove     = this.data.moves.undoMoves.shift(),
+  var lastMove     = this.moves.undoMoves.shift(),
       lastPos      = this.findLastPosition(lastMove.currPosition, lastMove.lastVector),
       unMixedColor = this.reverseAverage(lastMove.mergedColor, lastMove.lastColor);
 
@@ -420,25 +462,31 @@ Game.prototype.undo = function() {
   this.getPreviewColors(lastMove.lastPosition);
   this.userMoves -=1;
   this.renderer.renderStats(this.userMoves, this.setting);
+  //~~~ serialize game ~~~//
+  console.log(lastMove.lastPosition);
+  this.serializeState(lastMove.lastPosition);
 };
 
 //~~ Redo function ~~//
 Game.prototype.redo = function() {
+  console.log("redoing...");
   if (this.gameOver) {
     return;
   }
 
   //~~~ Return if there are no redo moves in stored ~~~//
-  if (this.data.moves.redoMoves.length === 0) {
+  if (this.moves.redoMoves.length === 0) {
     return;
-  };
+  }
 
   //~~~ Store undo moves into redo moves array ~~~//
-  if (this.data.moves.redoMoves.length !== 0) {
-    this.data.moves.undoMoves.unshift(this.data.moves.redoMoves[0]);
+  if (this.moves.redoMoves.length !== 0) {
+    console.log("storing redo...");
+    this.moves.undoMoves.unshift(this.moves.redoMoves[0]);
   }
+
   //~~~ Remove last move from redo list ~~~//
-  var redoLast = this.data.moves.redoMoves.shift(),
+  var redoLast = this.moves.redoMoves.shift(),
       redoPos  = this.findNextPosition(redoLast.lastPosition, redoLast.lastVector);
 
   //~~~ Save redone position ~~~//
@@ -452,6 +500,9 @@ Game.prototype.redo = function() {
   this.getPreviewColors(redoLast.currPosition);
   this.userMoves +=1;
   this.renderer.renderStats(this.userMoves, this.setting);
+  //~~~ serialize game ~~~//
+  console.log(redoLast.currPosition);
+  this.serializeState(redoLast.currPosition);
 };
 
 //~~~~~~ AI PLAY ~~~~~~//

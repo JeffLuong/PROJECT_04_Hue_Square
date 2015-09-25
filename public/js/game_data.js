@@ -2,11 +2,11 @@
 window.tempStorage = {
   data: {},
 
-  saveData: function(id, val) {
+  setItem: function(id, val) {
     return this.data[id] = String(val);
   },
 
-  getData: function(id) {
+  getItem: function(id) {
     if (this.data.hasOwnProperty(id)) {
       return this.data[id];
     } else {
@@ -14,7 +14,7 @@ window.tempStorage = {
     }
   },
 
-  deleteData: function(id) {
+  removeItem: function(id) {
     return delete this.data[id];
   },
 
@@ -46,18 +46,22 @@ function GameData() {
 GameData.prototype.isLocalStorageSupported = function() {
   var test    = "works?",
       storage = window.localStorage;
+
+  console.log("testing if local storage is supported...");
   try {
-    storage.saveData(test, "yes");
-    storage.deleteData(test);
+    storage.setItem(test, "yes");
+    storage.removeItem(test);
+    console.log("supported");
     return true;
   } catch (err) {
+    console.log("not supported", err);
     return false;
   }
 };
 
 // Game state functions
 GameData.prototype.getCurrGame = function() {
-  var gameJSON = this.storage.getData(this.gameKey);
+  var gameJSON = this.storage.getItem(this.gameKey);
   if (gameJSON) {
     return JSON.parse(gameJSON);
   } else {
@@ -66,30 +70,32 @@ GameData.prototype.getCurrGame = function() {
 };
 
 GameData.prototype.storeGame = function(game) {
-  this.storage.saveData(this.gameKey, JSON.stringify(game));
+  console.log("storing game data...");
+  this.storage.setItem(this.gameKey, JSON.stringify(game));
+  console.log(this.storage);
 };
 
 GameData.prototype.deleteGame = function() {
-  this.storage.deleteData(this.gameKey);
+  this.storage.removeItem(this.gameKey);
 };
 
 // Game moves functions
 // GameData.prototype.getMovesMade = function() {
-//   return this.storage.getData.(this.movesKey)userMoves || [];
+  // return this.storage.getItem(this.movesKey)userMoves || [];
 // };
 
 
-GameData.prototype.storeMove = function(lastMove) {
-  this.moves.undoMoves.unshift(lastMove);
-};
+// GameData.prototype.storeMove = function(lastMove) {
+//   this.moves.undoMoves.unshift(lastMove);
+// };
 
 // GameData.prototype.saveMoves = function(moves) {
-//   return this.storage.setData.(this.movesKey, moves);
+//   return this.storage.setData(this.movesKey, moves);
 // };
-//
-// GameData.prototype.getMoves = function() {
-//   return this.storage.setData.(this.movesKey) || JSON.stringify({ undoMoves: [], redoMoves: [] });
-// };
+
+GameData.prototype.getMoves = function() {
+  return this.storage.setData(this.movesKey) || JSON.stringify({ undoMoves: [], redoMoves: [] });
+};
 
 
 
