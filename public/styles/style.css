@@ -23,7 +23,76 @@ p {
   margin: 0;
 }
 
+#loading {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+  background-color: #F8F8F8;
+}
+
+.loading-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -oz-justify-content: center;
+}
+
+.loading-square {
+  width: 470px;
+  height: 470px;
+  margin: 170px auto 0px;
+  background-color: #4C66E6;
+  z-index: 101;
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -oz-flex;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -oz-justify-content: center;
+}
+
+.loading-diamond {
+  z-index: 102;
+  height: 40%;
+  width: 40%;
+  margin: auto;
+  background-color: red;
+  -webkit-animation: loading 1.5s linear infinite;
+  -moz-animation: loading 1.5s linear infinite;
+  -ms-animation: loading 1.5s linear infinite;
+  transform-origin: 50% 50%;
+}
+
+@-webkit-keyframes loading {
+  from {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 #main-container {
+  display: none;
   margin: 0 auto;
   padding-top: 20px;
   width: 500px;
@@ -585,12 +654,18 @@ button:focus {
     padding-top: 0;
   }
 
+  .loading-square {
+    height: 280px;
+    width: 280px;
+    margin-top: 9em;
+  }
+
   .game-menu {
     margin-top: 15px;
   }
 
   .game-title {
-    font-size: 3.95em;
+    font-size: 3em;
     width: 40%;
   }
 
