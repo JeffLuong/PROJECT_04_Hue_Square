@@ -19,14 +19,17 @@ GameRenderer.prototype.removeGameBoard = function(board) {
 }
 
 //~~~~~~ Render game stats ~~~~~~//
-GameRenderer.prototype.renderStats = function(count, level) {
+GameRenderer.prototype.renderStats = function(count, level, wins) {
   setTimeout(function() {
     $(".game-levels").addClass("animateStats");
     $(".game-moves").addClass("animateStats");
+    $(".game-wins").addClass("animateStats");
   }, 250);
   setTimeout(function() {
+    $(".wins").text(wins);
     $(".moves").text(count);
     $(".levels").text(level);
+    $(".game-wins").addClass("animateText");
     $(".game-moves p").addClass("animateText");
     $(".game-levels p").addClass("animateText");
   }, 500);

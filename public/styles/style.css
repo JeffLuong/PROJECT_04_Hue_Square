@@ -86,13 +86,13 @@ p {
 }
 
 .game-stats-container {
-  width: 40%;
+  width: 61%;
 }
 
-.game-moves, .game-levels {
+.game-moves, .game-wins, .game-levels {
   text-align: center;
   padding: 10px 0 0;
-  margin-right: 15px;
+  margin-right: 5px;
   width: 0;
   height: 0;
   /*display: inline-block;*/
@@ -102,17 +102,21 @@ p {
   overflow: hidden;
 }
 
+.game-moves {
+  margin-right: 15px;
+}
+
 .animateStats {
   width: 75px;
   height: 75px;
 }
 
-.game-moves p, .game-levels p {
+.game-moves p, .game-wins p, .game-levels p {
   font-size: 1.25em;
   color: white;
 }
 
-.game-moves p + p, .game-levels p + p {
+.game-moves p + p, .game-wins p + p, .game-levels p + p {
   font-size: 1.75em;
 }
 
@@ -586,7 +590,8 @@ button:focus {
   }
 
   .game-title {
-    font-size: 2em;
+    font-size: 3.95em;
+    width: 40%;
   }
 
   .game-title :last-child{
@@ -615,7 +620,11 @@ button:focus {
     font-size: 1.25em;
   }
 
-  .game-moves, .game-levels {
+  .game-stats-container {
+    width: 65%;
+  }
+
+  .game-moves, .game-wins, .game-levels {
     padding: 5px 0 0;
     width: 45px;
     height: 45px;
@@ -625,12 +634,12 @@ button:focus {
     margin-right: .25em;
   }
 
-  .game-moves p, .game-levels p {
+  .game-moves p, .game-wins p, .game-levels p {
     font-size: .85em;
   }
 
-  .game-moves p + p, .game-levels p + p {
-    font-size: 1em;
+  .game-moves p + p, .game-wins p + p, .game-levels p + p {
+    font-size: 1.5em;
   }
 
   .game-instructions p {

@@ -33,7 +33,6 @@ var prevState     = this.data.getCurrGame();
     this.gameOver = false;
     this.won      = false;
 
-
   if (prevState) {
     this.board            = new Board(prevState.board.size);
     this.gameBoard        = prevState.board.savedBoard;
@@ -53,7 +52,7 @@ var prevState     = this.data.getCurrGame();
     this.makeTiles(prevState.board.savedBoard);
     this.initUser(prevState.savedPosition);
     this.renderer.initBoard(this.size, prevState.board.savedBoard, this.userTile, this.winColor);
-    this.renderer.renderStats(this.userMoves, setting);
+    this.renderer.renderStats(this.userMoves, setting, this.totalWins);
     this.getPreviewColors(prevState.savedPosition);
   } else {
     this.currLevel        = this.levels[setting]; // setting refers to what user passes in as difficulty
@@ -70,7 +69,7 @@ var prevState     = this.data.getCurrGame();
     this.initUser();
     this.genSolution(this.currLevel);
     this.renderer.initBoard(this.size, this.gameBoard, this.userTile, this.winColor);
-    this.renderer.renderStats(this.userMoves, this.setting);
+    this.renderer.renderStats(this.userMoves, this.setting, this.totalWins);
     this.startPoint = this.getStartPosition(this.size);
     this.getPreviewColors(this.startPoint);
     this.data.storeGame(this.serializeState(this.startPoint));
@@ -82,11 +81,13 @@ Game.prototype.initLevels = function() {
   var that = this;
   var levels  = {
         1: { scale: 0.80, size: 2, moveRange: { min: 2, max: 4} }, //moveRange is num of moves ai takes
-        2: { scale: 0.85, size: 3, moveRange: { min: 3, max: 6} }, //moveRange is num of moves ai takes
-        3: { scale: 0.90, size: 4, moveRange: { min: 4, max: 8} }, //moveRange is num of moves ai takes
-        4: { scale: 0.92, size: 5, moveRange: { min: 7, max: 14} }, //moveRange is num of moves ai takes
-        5: { scale: 0.94, size: 6, moveRange: { min: 8, max: 16} }, //moveRange is num of moves ai takes
-        6: { scale: 0.96, size: 7, moveRange: { min: 10, max: 20} }, //moveRange is num of moves ai takes
+        2: { scale: 0.85, size: 3, moveRange: { min: 3, max: 6} },
+        3: { scale: 0.90, size: 4, moveRange: { min: 4, max: 8} },
+        4: { scale: 0.92, size: 5, moveRange: { min: 7, max: 14} },
+        5: { scale: 0.94, size: 6, moveRange: { min: 8, max: 16} },
+        6: { scale: 0.96, size: 7, moveRange: { min: 10, max: 20} },
+        7: { scale: 0.97, size: 8, moveRange: { min: 12, max: 24} },
+        8: { scale: 0.98, size: 9, moveRange: { min: 15, max: 26} },
         winPoint: function(level) {
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
         }
@@ -199,7 +200,7 @@ Game.prototype.insertUser = function(board, position) {
 };
 
 //~~~~~~ Move user Tile ~~~~~~//
-Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
+Game.prototype.moveUser = function(direction, aiPlayer, aiMoves, solution) {
   var position = null,
       vector   = this.getDirection(direction);
   //~~~~~ If game over, do nothing ~~~~~//
@@ -277,9 +278,9 @@ Game.prototype.moveUser = function(direction, aiPlayer, aiMoves) {
     };
     this.movedFromStart = true;
     this.updateGame(lastMove, nextPosition, mixedColor);
-    this.testIfWon(nextPosition, mixedColor);
+    this.testIfWon(nextPosition, mixedColor, solution);
     this.userMoves++;
-    this.renderer.renderStats(this.userMoves, this.setting);
+    this.renderer.renderStats(this.userMoves, this.setting, this.totalWins);
   };
 };
 
@@ -323,14 +324,14 @@ Game.prototype.findNeighbors = function(position) {
   return availableNeighbors;
 };
 
-Game.prototype.testIfWon = function(position, color) {
+Game.prototype.testIfWon = function(position, color, solution) {
   var rangeHigh = this.winColor + 2.25,
       rangeLow  = this.winColor - 2.25;
   if (position.x === this.winPoint.x && position.y === this.winPoint.y) {
     this.data.deleteGameState();
     this.gameOver = true;
-    if (color >= rangeLow && color <= rangeHigh) {
-      this.won       = true;
+    if (color >= rangeLow && color <= rangeHigh && solution !== true) {
+      this.won = true;
       this.wins++;
       this.totalWins++;
       this.renderer.rotateGoal(false, true);
@@ -475,7 +476,7 @@ Game.prototype.undo = function() {
   this.renderer.renderUser(lastMove.currPosition, lastMove.lastPosition, lastMove.lastColor);
   this.getPreviewColors(lastMove.lastPosition);
   this.userMoves -=1;
-  this.renderer.renderStats(this.userMoves, this.setting);
+  this.renderer.renderStats(this.userMoves, this.setting, this.totalWins);
   //~~~ serialize game ~~~//
   this.data.storeGame(this.serializeState(lastMove.lastPosition));
 };
@@ -512,7 +513,7 @@ Game.prototype.redo = function() {
   this.renderer.renderUser(redoLast.lastPosition, redoLast.currPosition, redoLast.mergedColor);
   this.getPreviewColors(redoLast.currPosition);
   this.userMoves++;
-  this.renderer.renderStats(this.userMoves, this.setting);
+  this.renderer.renderStats(this.userMoves, this.setting, this.totalWins);
   //~~~ serialize game ~~~//
   this.data.storeGame(this.serializeState(redoLast.currPosition));
 };
@@ -530,22 +531,21 @@ Game.prototype.genSolution = function(difficulty) {
       break;
     };
   };
-  console.log(this.aiMoves);
   this.winColor = this.returnColor(this.winPoint, this.dupeBoard);
-  console.log(this.winPoint, this.winColor);
 };
 
 //~~~~~ Play solution ~~~~~//
 Game.prototype.showSolution = function() {
   this.restart();
-  var length  = this.aiMoves.length,
-      that    = this,
-      timeout = 10;
+  var length   = this.aiMoves.length,
+      that     = this,
+      solution = true,
+      timeout  = 10;
 
   for (var i = 0; i < length; i++) {
     (function(i) {
       setTimeout(function() {
-        that.moveUser(that.aiMoves[i], undefined, true);
+        that.moveUser(that.aiMoves[i], undefined, true, solution);
       }, 750 + (750 * i));
     })(i);
   };
