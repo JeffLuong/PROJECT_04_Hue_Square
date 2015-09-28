@@ -86,8 +86,6 @@ Game.prototype.initLevels = function() {
         4: { scale: 0.92, size: 5, moveRange: { min: 7, max: 14} },
         5: { scale: 0.94, size: 6, moveRange: { min: 8, max: 16} },
         6: { scale: 0.96, size: 7, moveRange: { min: 10, max: 20} },
-        7: { scale: 0.97, size: 8, moveRange: { min: 12, max: 24} },
-        8: { scale: 0.98, size: 9, moveRange: { min: 15, max: 26} },
         winPoint: function(level) {
           return { x: that.levels[level].size - 1, y: that.levels[level].size - 1 };
         }
