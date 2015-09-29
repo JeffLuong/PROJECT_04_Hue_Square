@@ -24,12 +24,6 @@ window.tempStorage = {
 }
 
 function GameData() {
-  this.moves = {
-    undoMoves: [],
-    redoMoves: []
-  };
-  this.gameState;
-  this.dupeBoard;
   this.currLvlKey   = "currLvl";
   this.userStatsKey = "stats";
   this.gameKey      = "gameState";
