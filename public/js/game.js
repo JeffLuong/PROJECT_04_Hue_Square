@@ -74,7 +74,7 @@ var prevState     = this.data.getCurrGame();
     this.getPreviewColors(this.startPoint);
     this.data.storeGame(this.serializeState(this.startPoint));
   };
-
+  console.log(this.gameBoard);
 };
 
 Game.prototype.initLevels = function() {

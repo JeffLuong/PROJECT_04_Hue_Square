@@ -189,6 +189,12 @@ p {
   font-size: 1.75em;
 }
 
+.game-announcements {
+  text-align: center;
+  color: #0298db;
+  font-size: 1.25em;
+}
+
 .board-row {
   width: 100%;
 }
@@ -243,7 +249,7 @@ p {
 .game-menu {
   width: 100%;
   height: 30px;
-  margin-top: 20px;
+  margin-top: 15px;
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
