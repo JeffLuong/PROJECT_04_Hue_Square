@@ -67,7 +67,7 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
     $row.css({
       "height": "calc(100% / " + size + ")"
     });
-    //~~ APPEND EACH TILE INDIVIDUALLY WITH DELAY? ~~//
+    //~~ APPEND EACH TILE INDIVIDUALLY WITH DELAY ~~//
     this.$boardContainer.append($row);
   };
   //~~ Adds animation for each tile ~~//
@@ -80,6 +80,15 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
       };
     }
   }, 250);
+
+  setTimeout(function() {
+    for (var y = 0; y < size; y++) {
+      for (var x = 0; x < size; x++) {
+        var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1));
+        $eachTile.removeClass("delayX" + (x + 1) + "Y" + (y + 1));
+      };
+    }
+  }, 300);
 };
 
 //~~~~~~ Dynamically adds color attribute to tiles ~~~~~~//
