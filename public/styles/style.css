@@ -334,7 +334,7 @@ p {
    animation-fill-mode: both;
 }
 
-@-webkit-keyframes fadeIn {
+@-webkit-keyframes fadeOut {
   0% {
     opacity: 1;
   }
@@ -343,7 +343,7 @@ p {
     opacity: 0;
   }
 }
-@-moz-keyframes fadeIn {
+@-moz-keyframes fadeOut {
   0% {
     opacity: 1;
   }
@@ -353,7 +353,7 @@ p {
   }
 }
 
-@keyframes fadeIn {
+@keyframes fadeOut {
   0% {
     opacity: 1;
   }
