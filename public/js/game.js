@@ -8,7 +8,6 @@ function Game(GameControls, GameRenderer, GameData) {
     360, 230, 60
   ];
   this.userStats = this.data.getUserStats();  // check if user stats are stored
-  console.log(this.userStats);
   if (this.userStats) {
     this.setting = this.userStats.level; // refers to difficulty level...if current player's level is saved, load that
   } else {
@@ -74,7 +73,6 @@ var prevState     = this.data.getCurrGame();
     this.getPreviewColors(this.startPoint);
     this.data.storeGame(this.serializeState(this.startPoint));
   };
-  console.log(this.gameBoard);
 };
 
 Game.prototype.initLevels = function() {
@@ -349,7 +347,6 @@ Game.prototype.testIfWon = function(position, color, solution) {
       this.renderer.renderMessage(false, false);
     };
   };
-  console.log(this.wins);
 };
 
 Game.prototype.getPreviewColors = function(position) {
@@ -446,7 +443,6 @@ Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) { // ne
 //~~ Undo function ~~//
 Game.prototype.undo = function() {
   if (this.gameOver) {
-    console.log("can't undo because game is over");
     return;
   }
   //~~~ Return if there are no undo moves in stored ~~~//
@@ -456,7 +452,6 @@ Game.prototype.undo = function() {
 
   //~~~ Store undo moves into redo moves array ~~~//
   if (this.moves.undoMoves.length !== 0) {
-    console.log("storing undo...");
     this.moves.redoMoves.unshift(this.moves.undoMoves[0]);
   }
 
@@ -482,7 +477,6 @@ Game.prototype.undo = function() {
 
 //~~ Redo function ~~//
 Game.prototype.redo = function() {
-  console.log("redoing...");
   if (this.gameOver) {
     return;
   }
@@ -494,7 +488,6 @@ Game.prototype.redo = function() {
 
   //~~~ Store undo moves into redo moves array ~~~//
   if (this.moves.redoMoves.length !== 0) {
-    console.log("storing redo...");
     this.moves.undoMoves.unshift(this.moves.redoMoves[0]);
   }
 
