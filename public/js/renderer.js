@@ -74,8 +74,22 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
   setTimeout(function() {
     for (var y = 0; y < size; y++) {
       for (var x = 0; x < size; x++) {
-        var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1));
-        $eachTile.addClass("delayX" + (x + 1) + "Y" + (y + 1));
+        var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1)),
+            delay     = x + y;
+            
+        // Adds decimal point into delay time.
+        if (delay >= 10) {
+          var splitDelay = delay.toString().split(""),
+              index     = splitDelay.length - 1;
+
+          splitDelay.splice(index, 0, ".");
+          delay = splitDelay.join("") + "s";
+        } else {
+          delay = "0." + delay.toString() + "s";
+        }
+        $eachTile.css({
+          "transition-delay": delay
+        });
         $eachTile.addClass("animateIn");
       };
     }
@@ -85,7 +99,9 @@ GameRenderer.prototype.makeRows = function(size, board, winColor) {
     for (var y = 0; y < size; y++) {
       for (var x = 0; x < size; x++) {
         var $eachTile = $(".tile-position-" + (x + 1) + "-" + (y + 1));
-        $eachTile.removeClass("delayX" + (x + 1) + "Y" + (y + 1));
+        $eachTile.css({
+          "transition-delay": "0s"
+        });
       };
     }
   }, 300);

@@ -446,6 +446,7 @@ Game.prototype.updateGame = function(lastMove, nextPosition, mixedColor) { // ne
 //~~ Undo function ~~//
 Game.prototype.undo = function() {
   if (this.gameOver) {
+    console.log("can't undo because game is over");
     return;
   }
   //~~~ Return if there are no undo moves in stored ~~~//
