@@ -193,6 +193,17 @@ p {
   text-align: center;
   color: #0298db;
   font-size: 1.25em;
+  margin-top: 5px;
+}
+
+.game-announcements a {
+  font-weight: bold;
+  color: #0298db;
+  text-decoration: none;
+}
+
+.game-announcements a:hover {
+  border-bottom: 2px solid #0298db;
 }
 
 .board-row {
