@@ -1,6 +1,6 @@
 ## Hue Square v.1.0.0
 
-####Play it here: [Hue](https://hue-the-game.herokuapp.com/)
+#### Play it here: [Hue](https://hue-the-game.herokuapp.com/)
 ----
 
 #### What is Hue Square?
